@@ -1,9 +1,10 @@
-import * as esbuild from 'esbuild';
+import * as esbuild from "esbuild";
 
-esbuild.build({
-    entryPoints: ["./src/index.ts", "./src/cli.ts"],
+await esbuild.build({
+    entryPoints: ["./src/cli.ts"],
     bundle: true,
     outdir: "dist",
     platform: "node",
     format: "cjs",
-})
+    banner: { "js": "#!/usr/bin/env node" },
+});
