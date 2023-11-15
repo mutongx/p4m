@@ -14,7 +14,7 @@ function generate(objects: string[], version: number = 0) {
 
 async function parse(process: ChildProcess) {
     const parser = new MarshalParser(process.stdout!);
-    const items: any[] = [];
+    const items: unknown[] = [];
     for await (const item of parser.consume()) {
         items.push(item);
     }

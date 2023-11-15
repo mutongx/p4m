@@ -32,8 +32,8 @@ interface Pointer {
     type: string
     dirty: boolean
     dataType?: DataType
-    obj?: any
-    objKey?: any
+    obj?: unknown
+    objKey?: unknown
 }
 
 export class MarshalParser {
@@ -85,7 +85,7 @@ export class MarshalParser {
             if (ptr.objKey === undefined) {
                 ptr.objKey = value;
             } else {
-                ptr.obj.set(ptr.objKey, value);
+                (ptr.obj as Map<unknown, unknown>).set(ptr.objKey, value);
                 ptr.objKey = undefined;
             }
             ptr.dataType = undefined;
