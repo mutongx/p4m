@@ -2,39 +2,28 @@ import process from "process";
 import child from "child_process";
 import { open } from "fs/promises";
 import { MarshalParser } from "./marshal";
+import p4cmd from "./p4cmd";
 
-async function runWithParse(args: string[]) {
+async function run(args: string[]) {
+    const action = args[0];
     args.unshift("-G");
     const proc = child.spawn("p4", args, {
         stdio: ["pipe", "pipe", "inherit"],
         env: {
             ...process.env,
-            "P4EDITOR": `${process.argv[0]} ${process.argv[1]} -E`
+            "P4EDITOR": `${process.argv[0]} ${process.argv[1]} -E`,
         },
     });
-    const m = new MarshalParser(proc.stdout!);
-    for await (const obj of m.consume()) {
-        const item = obj as Map<string, string>;
-        const code = item.get("code");
-        item.delete("code");
-        switch (code) {
-        case "info":
-            console.log(item.get("data")?.trimEnd());
-            break;
-        case "error":
-            console.log(item.get("data")?.trimEnd());
-            break;
-        case "stat":
-            console.log(item);
-            break;
-        default:
-            console.log(item);
-            break;
-        }
+    const command = new p4cmd[action]!();
+    const parser = new MarshalParser(proc.stdout!);
+    for await (const obj of parser.consume()) {
+        const item = obj as Map<string, unknown>;
+        command.feed(item);
     }
+    return command.finalize();
 }
 
-async function runWithoutParse(args: string[]) {
+async function runPassthrough(args: string[]) {
     child.spawn("p4", args, { stdio: "inherit" });
 }
 
@@ -46,13 +35,19 @@ async function runEditor(args: string[]) {
 
 async function main() {
     const args = process.argv.slice(2);
-    if (args[0] && args[0].substring(0, 1) === "-") {
+    if (!args[0]) {
+        return await runPassthrough(args);
+    }
+    if (args[0].substring(0, 1) === "-") {
         if (args[0] == "-E") {
             return await runEditor(args);
         }
-        return await runWithoutParse(args);
+        return await runPassthrough(args);
     }
-    return await runWithParse(args);
+    if (!p4cmd[args[0]]) {
+        return await runPassthrough(args);
+    }
+    return await run(args);
 }
 
 main();
