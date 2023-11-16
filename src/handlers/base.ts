@@ -1,13 +1,23 @@
 import { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "./types";
 
+export interface HandlerOption {
+    root?: boolean;
+}
+
 export default abstract class Handler {
+
+    option: HandlerOption;
+
+    constructor(option: HandlerOption = {}) {
+        this.option = option;
+    }
 
     stat(stat: StatMessage) { stat; }
     info(info: InfoMessage) { info; }
     error(error: ErrorMessage) { error; }
     text(text: TextMessage) { text; }
 
-    async finalize() { }
+    async finalize(): Promise<unknown> { return null; }
 
     feed(obj: Map<string, unknown>) {
         const code = obj.get("code");
