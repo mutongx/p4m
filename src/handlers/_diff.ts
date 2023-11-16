@@ -3,10 +3,6 @@ import { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "./types";
 
 export default class DiffHandler extends Handler {
 
-    constructor() {
-        super();
-    }
-
     stat(stat: StatMessage) {
         console.log(stat);
     }

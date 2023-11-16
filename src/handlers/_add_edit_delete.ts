@@ -6,10 +6,6 @@ export default class AddEditDeleteHandler extends Handler {
 
     currentFile: string | null = null;
 
-    constructor() {
-        super();
-    }
-
     stat(stat: StatMessage) {
         const fa = stat as FileActionMessage;
         this.currentFile = fa.depotFile;

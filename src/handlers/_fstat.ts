@@ -3,10 +3,6 @@ import { ErrorMessage, FileInfoDumpMessage, InfoMessage, StatMessage } from "./t
 
 export default class FstatHandler extends Handler {
 
-    constructor() {
-        super();
-    }
-
     stat(stat: StatMessage) {
         const fs = stat as FileInfoDumpMessage;
         console.log(fs);
