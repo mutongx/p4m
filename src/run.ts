@@ -4,12 +4,21 @@ import { open } from "fs/promises";
 import { MarshalParser } from "./marshal";
 import Handler from "./handlers/base";
 
+function getCallSelfCommand() {
+    // TODO (mut): Use shell quote for return value
+    if (process.execPath == module.filename) {
+        // Running in SEA mode
+        return process.execPath;
+    }
+    return `${process.execPath} ${module.filename}`;
+}
+
 export async function run(command: string, handler: Handler, args: string[]) {
     const proc = child.spawn("p4", ["-G", command, ...args], {
         stdio: ["pipe", "pipe", "inherit"],
         env: {
             ...process.env,
-            "P4EDITOR": `${process.argv[0]} ${process.argv[1]} -E`,
+            "P4EDITOR": `${getCallSelfCommand()} -E`,
         },
     });
     const parser = new MarshalParser(proc.stdout!);
