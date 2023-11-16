@@ -1,14 +1,15 @@
 import Handler from "./base";
-import { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "../types";
+import { ErrorMessage, FileStatusMessage, InfoMessage, StatMessage } from "./types";
 
-export default class DiffHandler extends Handler {
+export default class StatusHandler extends Handler {
 
     constructor() {
         super();
     }
 
     stat(stat: StatMessage) {
-        console.log(stat);
+        const fs = stat as FileStatusMessage;
+        console.log(fs);
     }
 
     info(info: InfoMessage) {
@@ -17,10 +18,6 @@ export default class DiffHandler extends Handler {
 
     error(error: ErrorMessage) {
         console.log(error);
-    }
-
-    text(text: TextMessage) {
-        console.log(text);
     }
 
     async finalize() {

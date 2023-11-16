@@ -1,5 +1,5 @@
 import { run, runPassthrough, runEditor } from "./run";
-import handlerMapping from "./handler";
+import handlerMapping from "./handlers";
 
 async function main() {
     const args = process.argv.slice(2);

@@ -2,7 +2,7 @@ import process from "process";
 import child from "child_process";
 import { open } from "fs/promises";
 import { MarshalParser } from "./marshal";
-import Handler from "./handler/base";
+import Handler from "./handlers/base";
 
 export async function run(command: string, handler: Handler, args: string[]) {
     const proc = child.spawn("p4", ["-G", command, ...args], {

@@ -1,5 +1,5 @@
 import Handler from "./base";
-import { ErrorMessage, FileInfoDumpMessage, InfoMessage, StatMessage } from "../types";
+import { ErrorMessage, FileInfoDumpMessage, InfoMessage, StatMessage } from "./types";
 
 export default class FstatHandler extends Handler {
 

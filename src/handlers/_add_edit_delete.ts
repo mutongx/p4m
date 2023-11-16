@@ -1,5 +1,5 @@
 import Handler from "./base";
-import { ErrorMessage, FileActionMessage, InfoMessage, StatMessage } from "../types";
+import { ErrorMessage, FileActionMessage, InfoMessage, StatMessage } from "./types";
 import { actionConvert } from "../convert";
 
 export default class AddEditDeleteHandler extends Handler {
@@ -21,14 +21,14 @@ export default class AddEditDeleteHandler extends Handler {
         const fileName = info.data.substring(0, lastDash);
         if (fileName == this.currentFile) {
             const infoMessage = info.data.substring(lastDash + 3).trim();
-            console.log(`   ! ${infoMessage}`);
+            console.log(`    ! ${infoMessage}`);
         } else {
             console.log(`${info.data.trim()}`);
         }
     }
 
     error(error: ErrorMessage) {
-        console.log(`${error.data.trim()}`);
+        console.log(`Error: ${error.data.trim()}`);
     }
 
     async finalize() {

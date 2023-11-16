@@ -1,4 +1,4 @@
-import { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "../types";
+import { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "./types";
 
 export default abstract class Handler {
 
