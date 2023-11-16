@@ -2,7 +2,7 @@
   "name": "p4m",
   "license": "MIT",
   "description": "A toy to mess around Perforce's Helix Command-Line Client (P4).",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "bin": "dist/cli.js",
   "scripts": {
     "cli": "node ./dist/cli.js",
