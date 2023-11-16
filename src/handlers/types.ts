@@ -41,3 +41,13 @@ export interface FileStatusMessage extends StatMessage {
 export interface FileInfoDumpMessage extends StatMessage {
     // TODO (mut)
 }
+
+export interface ChangeSpecificationMessage extends StatMessage {
+    Change: string,
+    Date: string,
+    Client: string,
+    User: string,
+    Status: string,
+    Type: string,
+    Description: string,
+}
