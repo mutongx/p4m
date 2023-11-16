@@ -3,9 +3,15 @@ name: p4m
 version: 0.1.0
 
 build: |
+
   mkdir -p dist/
   npm run build
+
   cp "$(command -v node)" dist/p4m
   node --experimental-sea-config sea-config.json
   npx postject dist/p4m NODE_SEA_BLOB dist/sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2
-  install ./dist/p4m bin/
+
+  mkdir -p "${INSTALL_DIR}/bin"
+  mkdir -p "${INSTALL_DIR}/etc/profile.d"
+  cp ./dist/p4m "${INSTALL_DIR}/bin/p4m"
+  echo "alias p4=p4m" >"${INSTALL_DIR}/etc/profile.d/p4m-alias"
