@@ -9,11 +9,11 @@ export const actionConvert = {
         "move/del": "MD",
     } as { [key: string]: string },
     short: {
-        "add": " ADD",
-        "edit": "EDIT",
-        "delete": " DEL",
-        "move/add": "MADD",
-        "move/del": "MDEL",
+        "add": " add",
+        "edit": "edit",
+        "delete": " del",
+        "move/add": "madd",
+        "move/del": "mdel",
     } as { [key: string]: string },
     emoji: {
         "add": "✨",
