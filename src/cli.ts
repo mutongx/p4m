@@ -20,17 +20,20 @@ async function run(args: string[]) {
         const item = obj as Map<string, unknown>;
         command.feed(item);
     }
+    await new Promise((resolve) => { proc.on("exit", resolve); });
     return command.finalize();
 }
 
 async function runPassthrough(args: string[]) {
-    child.spawn("p4", args, { stdio: "inherit" });
+    const proc = child.spawn("p4", args, { stdio: "inherit" });
+    await new Promise((resolve) => { proc.on("exit", resolve); });
 }
 
 async function runEditor(args: string[]) {
     args.shift();
     const tty = await open("/dev/tty", "w+");
-    child.spawnSync("vim", args, { stdio: [tty.createReadStream(), tty.createWriteStream()] });
+    const proc = child.spawn("vim", args, { stdio: [tty.createReadStream(), tty.createWriteStream()] });
+    await new Promise((resolve) => { proc.on("exit", resolve); });
 }
 
 async function main() {
