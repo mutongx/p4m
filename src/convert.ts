@@ -1,3 +1,5 @@
+import chalk, { ChalkInstance } from "chalk";
+
 export const actionConvert = {
     char: {
         "add": "A",
@@ -20,4 +22,11 @@ export const actionConvert = {
         "move/add": "📑",
         "move/del": "✂️",
     } as { [key: string]: string },
+    color: {
+        "add": chalk.green,
+        "edit": chalk.yellow,
+        "delete": chalk.red,
+        "move/add": chalk.green,
+        "move/del": chalk.red,
+    } as { [key: string] : ChalkInstance},
 };
