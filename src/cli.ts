@@ -21,7 +21,7 @@ async function run(args: string[]) {
         command.feed(item);
     }
     await new Promise((resolve) => { proc.on("exit", resolve); });
-    return command.finalize();
+    return await command.finalize();
 }
 
 async function runPassthrough(args: string[]) {

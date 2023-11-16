@@ -23,7 +23,7 @@ export default class DiffCommand extends Command {
         console.log(text);
     }
 
-    finalize() {
+    async finalize() {
 
     }
 

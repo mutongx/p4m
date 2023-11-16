@@ -20,7 +20,7 @@ export default class FstatCommand extends Command {
         console.log(error);
     }
 
-    finalize() {
+    async finalize() {
 
     }
 

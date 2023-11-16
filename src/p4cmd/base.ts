@@ -6,7 +6,8 @@ export default abstract class Command {
     info(info: InfoMessage) { info; }
     error(error: ErrorMessage) { error; }
     text(text: TextMessage) { text; }
-    finalize() { }
+
+    async finalize() { }
 
     feed(obj: Map<string, unknown>) {
         const code = obj.get("code");

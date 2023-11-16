@@ -20,7 +20,7 @@ export default class StatusCommand extends Command {
         console.log(error);
     }
 
-    finalize() {
+    async finalize() {
 
     }
 

@@ -1,5 +1,5 @@
 import Command from "./base";
-import { ErrorMessage, FileActionMessage, InfoMessage, StatMessage, TextMessage } from "../types";
+import { ErrorMessage, FileActionMessage, InfoMessage, StatMessage } from "../types";
 import { actionConvert } from "../convert";
 
 export default class AddEditDeleteCommand extends Command {
@@ -31,7 +31,7 @@ export default class AddEditDeleteCommand extends Command {
         console.log(`${error.data.trim()}`);
     }
 
-    finalize() {
+    async finalize() {
 
     }
 
