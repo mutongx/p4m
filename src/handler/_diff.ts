@@ -1,7 +1,7 @@
-import Command from "./base";
+import Handler from "./base";
 import { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "../types";
 
-export default class DiffCommand extends Command {
+export default class DiffHandler extends Handler {
 
     constructor() {
         super();

@@ -1,40 +1,5 @@
-import process from "process";
-import child from "child_process";
-import { open } from "fs/promises";
-import { MarshalParser } from "./marshal";
-import p4cmd from "./p4cmd";
-
-async function run(args: string[]) {
-    const action = args[0];
-    args.unshift("-G");
-    const proc = child.spawn("p4", args, {
-        stdio: ["pipe", "pipe", "inherit"],
-        env: {
-            ...process.env,
-            "P4EDITOR": `${process.argv[0]} ${process.argv[1]} -E`,
-        },
-    });
-    const command = new p4cmd[action]!();
-    const parser = new MarshalParser(proc.stdout!);
-    for await (const obj of parser.consume()) {
-        const item = obj as Map<string, unknown>;
-        command.feed(item);
-    }
-    await new Promise((resolve) => { proc.on("exit", resolve); });
-    return await command.finalize();
-}
-
-async function runPassthrough(args: string[]) {
-    const proc = child.spawn("p4", args, { stdio: "inherit" });
-    await new Promise((resolve) => { proc.on("exit", resolve); });
-}
-
-async function runEditor(args: string[]) {
-    args.shift();
-    const tty = await open("/dev/tty", "w+");
-    const proc = child.spawn("vim", args, { stdio: [tty.createReadStream(), tty.createWriteStream()] });
-    await new Promise((resolve) => { proc.on("exit", resolve); });
-}
+import { run, runPassthrough, runEditor } from "./run";
+import handlerMapping from "./handler";
 
 async function main() {
     const args = process.argv.slice(2);
@@ -47,10 +12,13 @@ async function main() {
         }
         return await runPassthrough(args);
     }
-    if (!p4cmd[args[0]]) {
+    const handlerClass = handlerMapping[args[0]];
+    if (!handlerClass) {
         return await runPassthrough(args);
     }
-    return await run(args);
+    const command = args.shift()!;
+    const handler = new handlerClass();
+    return await run(command, handler, args);
 }
 
 main();

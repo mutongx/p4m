@@ -1,7 +1,7 @@
-import Command from "./base";
+import Handler from "./base";
 import { ErrorMessage, FileInfoDumpMessage, InfoMessage, StatMessage } from "../types";
 
-export default class FstatCommand extends Command {
+export default class FstatHandler extends Handler {
 
     constructor() {
         super();

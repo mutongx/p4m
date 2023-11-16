@@ -1,8 +1,8 @@
-import Command from "./base";
+import Handler from "./base";
 import { ErrorMessage, FileActionMessage, InfoMessage, StatMessage } from "../types";
 import { actionConvert } from "../convert";
 
-export default class AddEditDeleteCommand extends Command {
+export default class AddEditDeleteHandler extends Handler {
 
     currentFile: string | null = null;
 

@@ -1,6 +1,6 @@
 import { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "../types";
 
-export default abstract class Command {
+export default abstract class Handler {
 
     stat(stat: StatMessage) { stat; }
     info(info: InfoMessage) { info; }

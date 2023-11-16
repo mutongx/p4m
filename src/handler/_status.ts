@@ -1,7 +1,7 @@
-import Command from "./base";
+import Handler from "./base";
 import { ErrorMessage, FileStatusMessage, InfoMessage, StatMessage } from "../types";
 
-export default class StatusCommand extends Command {
+export default class StatusHandler extends Handler {
 
     constructor() {
         super();
