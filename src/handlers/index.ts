@@ -1,8 +1,7 @@
 import Handler, { HandlerOption } from "./base";
 import AddEditDeleteHandler from "./_add_edit_delete";
 import StatusHandler from "./_status";
-import DiffHandler from "./_diff";
-import FstatHandler from "./_fstat";
+import ChangeHandler from "./_change";
 
 const mapping: { [key: string]: { new(option?: HandlerOption): Handler } } = {
     add: AddEditDeleteHandler,
@@ -10,8 +9,7 @@ const mapping: { [key: string]: { new(option?: HandlerOption): Handler } } = {
     delete: AddEditDeleteHandler,
     open: AddEditDeleteHandler,
     status: StatusHandler,
-    diff: DiffHandler,
-    fstat: FstatHandler,
+    change: ChangeHandler,
 };
 
 export default mapping;
