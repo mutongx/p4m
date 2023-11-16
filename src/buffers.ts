@@ -8,7 +8,7 @@ export default class Buffers {
         this.pos = 0;
     }
 
-    push(buf: Buffer): undefined {
+    push(buf: Buffer) {
         this.buffers.push(buf);
     }
 
