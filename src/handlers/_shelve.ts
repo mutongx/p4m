@@ -1,7 +1,14 @@
+import Buffers from "../buffers";
 import { run } from "../run";
-import ChangeHandler from "./_change";
-import { ChangeSpecificationMessage, ShelvedFileMessage, StatMessage } from "./types";
 import { actionConvert } from "../convert";
+import Handler from "./base";
+import ChangeHandler from "./_change";
+import { ChangeSpecificationMessage, ShelvedFileMessage, ErrorMessage, InfoMessage, StatMessage } from "./types";
+
+// TODO: Fix duplicated code with ChangeHandler
+
+const errorText = "Error in change specification.";
+const continueText = "Hit return to continue...";
 
 interface ShelvedFile {
     depotFile: string,
@@ -15,9 +22,11 @@ interface Shelve {
     files: ShelvedFile[],
 }
 
-export default class ShelveHandler extends ChangeHandler {
+export default class ShelveHandler extends Handler {
 
     shelve: Shelve | null = null;
+    messages: InfoMessage[] = [];
+    errors: ErrorMessage[] = [];
 
     descriptionPromise: Promise<ChangeSpecificationMessage | null> | null = null;
 
@@ -28,7 +37,7 @@ export default class ShelveHandler extends ChangeHandler {
                 throw new Error(`change number is not consistent: ${this.shelve.name} and ${sf.change}`);
             }
             if (this.shelve === null) {
-                this.shelve = {name: sf.change, files: []};
+                this.shelve = { name: sf.change, files: [] };
                 const handler = new ChangeHandler();
                 this.descriptionPromise = run("change", handler, ["-o", this.shelve.name]) as Promise<ChangeSpecificationMessage | null>;
             }
@@ -39,7 +48,32 @@ export default class ShelveHandler extends ChangeHandler {
         this.shelve.files.push(sf);
     }
 
-    
+    info(info: InfoMessage) {
+        this.messages.push(info);
+    }
+
+    error(error: ErrorMessage) {
+        this.errors.push(error);
+    }
+
+    take(buffers: Buffers) {
+        const error = this.errors[this.errors.length - 1];
+        if (this.option.root && error) {
+            if (error.data.startsWith(errorText)) {
+                // Print out the error data and pop it out
+                console.log(error.data.trim());
+                this.errors.pop();
+                // Consume the continuation prompt, don't give it to MarshalParser
+                const continueBuffer = buffers.consume(continueText.length);
+                if (!continueBuffer || continueBuffer.toString() !== continueText) {
+                    throw new Error("failed to parse continue text");
+                }
+                // Print it out to user
+                process.stdout.write(continueText);
+            }
+        }
+    }
+
     async finalize() {
         if (this.option.root) {
             if (this.shelve) {
@@ -57,7 +91,7 @@ export default class ShelveHandler extends ChangeHandler {
                 console.error(error.data.trim());
             }
         }
-        return this.change;
+        return this.shelve;
     }
 
 }
