@@ -27,6 +27,7 @@ export async function run(command: string, handler: Handler, args: string[]) {
         parser.push(chunk);
         for (const item of parser.iter()) {
             handler.feed(item as Map<string, unknown>);
+            handler.take(parser.buffers);
         }
     }
     parser.end();
