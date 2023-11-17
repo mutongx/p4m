@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+- `change` command's interactive mode no longer throws exception when invalid change is specified
+
 ## [0.1.0] - 2023-11-16
 
 ### Added
