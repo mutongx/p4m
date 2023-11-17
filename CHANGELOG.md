@@ -4,7 +4,8 @@
 
 ### Added
 
-- Support `shelve` command
+- Support `shelve` and `unshelve` command
+  - Bug: Both of them have some duplicated codes with others. Will try to fix it in the future.
 
 ### Fixed
 
