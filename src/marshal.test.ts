@@ -13,16 +13,11 @@ function generate(objects: string[], version: number = 0) {
 }
 
 async function parse(process: ChildProcess) {
-    const items: unknown[] = [];
     const parser = new MarshalParser();
-    parser.begin();
-    for await (const chunk of process.stdout!) {
-        parser.push(chunk);
-        for (const item of parser.iter()) {
-            items.push(item);
-        }
+    const items: unknown[] = [];
+    for await (const item of parser.consume(process.stdout!)) {
+        items.push(item);
     }
-    parser.end();
     return items;
 }
 

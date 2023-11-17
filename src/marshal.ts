@@ -283,4 +283,15 @@ export class MarshalParser {
         }
     }
 
+    async * consume(stream: Readable) {
+        this.begin();
+        for await (const chunk of stream) {
+            this.push(chunk);
+            for (const item of this.iter()) {
+                yield item;
+            }
+        }
+        this.end();
+    }
+
 }
