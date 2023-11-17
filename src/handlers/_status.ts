@@ -71,7 +71,8 @@ export default class StatusHandler extends Handler {
                     console.log("  (use p4 add/edit/delete/reconcile to track them)");
                 } else if (name == "default") {
                     console.log("Changelist default:");
-                    console.log("  (use p4 reopen to move them to numbered changelist)");
+                    console.log("  (use p4 shelve to create a new changelist and push them to server)");
+                    console.log("  (use p4 reopen to move them to a numbered changelist)");
                 } else if (change) {
                     console.log(`Changelist #${change.name}: ${change.description}`);
                     console.log("  (use p4 shelve to push them to server)");
