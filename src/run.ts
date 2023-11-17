@@ -15,7 +15,7 @@ function getCallSelfCommand() {
 
 export async function run(command: string, handler: Handler, args: string[]) {
     const proc = child.spawn("p4", ["-G", command, ...args], {
-        stdio: ["pipe", "pipe", "inherit"],
+        stdio: ["inherit", "pipe", "inherit"],
         env: {
             ...process.env,
             "P4EDITOR": `${getCallSelfCommand()} -E`,
