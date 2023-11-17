@@ -1,4 +1,3 @@
-import process from "process";
 import child from "child_process";
 import { open } from "fs/promises";
 import { MarshalParser } from "./marshal";
