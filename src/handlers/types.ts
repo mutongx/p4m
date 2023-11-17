@@ -51,3 +51,11 @@ export interface ChangeSpecificationMessage extends StatMessage {
     Type: string,
     Description: string,
 }
+
+export interface ShelvedFileMessage extends StatMessage {
+    change?: string,
+    openFiles?: string,
+    depotFile: string,
+    rev: string,
+    action: string,
+}
