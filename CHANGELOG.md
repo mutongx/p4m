@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Support `shelve` command
+
 ### Fixed
 
 - `change` command's interactive mode no longer throws exception when invalid change is specified
