@@ -1,3 +1,4 @@
+import Buffers from "../buffers";
 import { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "./types";
 
 export interface HandlerOption {
@@ -16,8 +17,6 @@ export default abstract class Handler {
     info(info: InfoMessage) { info; }
     error(error: ErrorMessage) { error; }
     text(text: TextMessage) { text; }
-
-    async finalize(): Promise<unknown> { return null; }
 
     feed(obj: Map<string, unknown>) {
         const code = obj.get("code");
@@ -38,5 +37,9 @@ export default abstract class Handler {
             throw new Error(`unrecognized code: ${code}`);
         }
     }
+
+    take(buffers: Buffers) { buffers; }
+
+    async finalize(): Promise<unknown> { return null; }
 
 }
