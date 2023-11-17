@@ -11,6 +11,7 @@ export default class AddEditDeleteHandler extends Handler {
     currentAction: FileAction | null = null;
     actions: FileAction[] = [];
     messages: InfoMessage[] = [];
+    errors: ErrorMessage[] = [];
 
     stat(stat: StatMessage) {
         const action: FileAction = { ...stat as FileActionMessage, messages: [] };
@@ -30,7 +31,7 @@ export default class AddEditDeleteHandler extends Handler {
     }
 
     error(error: ErrorMessage) {
-        console.log(`Error: ${error.data.trim()}`);
+        this.errors.push(error);
     }
 
     async finalize() {
@@ -44,6 +45,9 @@ export default class AddEditDeleteHandler extends Handler {
             }
             for (const message of this.messages) {
                 console.log(message.data.trim());
+            }
+            for (const error of this.errors) {
+                console.log(error.data.trim());
             }
         }
         return this.actions;

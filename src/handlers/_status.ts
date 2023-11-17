@@ -19,6 +19,8 @@ export default class StatusHandler extends Handler {
     currentFile: FileStatus | null = null;
     changes: { [key: string]: Change } = {};
     messages: InfoMessage[] = [];
+    errors: ErrorMessage[] = [];
+
     descriptionPromises: Promise<ChangeSpecificationMessage | null>[] = [];
 
     stat(stat: StatMessage) {
@@ -47,7 +49,7 @@ export default class StatusHandler extends Handler {
     }
 
     error(error: ErrorMessage) {
-        console.log(`Error: ${error.data.trim()}`);
+        this.errors.push(error);
     }
 
     async finalize() {
@@ -82,6 +84,9 @@ export default class StatusHandler extends Handler {
             }
             for (const message of this.messages) {
                 console.log(message.data.trim());
+            }
+            for (const error of this.errors) {
+                console.error(error.data.trim());
             }
         }
         return this.changes;
