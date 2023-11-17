@@ -21,11 +21,15 @@ export async function run(command: string, handler: Handler, args: string[]) {
             "P4EDITOR": `${getCallSelfCommand()} -E`,
         },
     });
-    const parser = new MarshalParser(proc.stdout!);
-    for await (const obj of parser.consume()) {
-        const item = obj as Map<string, unknown>;
-        handler.feed(item);
+    const parser = new MarshalParser();
+    parser.begin();
+    for await (const chunk of proc.stdout!) {
+        parser.push(chunk);
+        for (const item of parser.iter()) {
+            handler.feed(item as Map<string, unknown>);
+        }
     }
+    parser.end();
     await new Promise((resolve) => { proc.on("exit", resolve); });
     return await handler.finalize();
 }

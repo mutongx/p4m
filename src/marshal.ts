@@ -38,13 +38,11 @@ interface Pointer {
 
 export class MarshalParser {
 
-    stream: Readable;
     buffers: Buffers;
     root: unknown;
     ptrs: Array<Pointer>;
 
-    constructor(stream: Readable) {
-        this.stream = stream;
+    constructor() {
         this.buffers = new Buffers();
         this.root = undefined;
         this.ptrs = [];
@@ -261,18 +259,25 @@ export class MarshalParser {
         }
     }
 
-    async * consume() {
+    begin() {
         this.ptrs.push({ "type": "root", "dirty": false });
-        for await (const chunk of this.stream) {
-            this.buffers.push(chunk);
-            while (this.parse()) {
-                if (this.ptrs.length == 0) {
-                    yield this.root;
-                    this.root = undefined;
-                    this.ptrs.push({ "type": "root", "dirty": false });
-                }
+    }
+
+    push(chunk: Buffer) {
+        this.buffers.push(chunk);
+    }
+
+    * iter() {
+        while (this.parse()) {
+            if (this.ptrs.length == 0) {
+                yield this.root;
+                this.root = undefined;
+                this.ptrs.push({ "type": "root", "dirty": false });
             }
         }
+    }
+
+    end() {
         if (this.ptrs[0].dirty) {
             throw new Error("incomplete stream");
         }
