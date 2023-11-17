@@ -36,7 +36,7 @@ export default class ChangeHandler extends Handler {
                     throw new Error("failed to parse continue text");
                 }
                 // Print it out to user
-                console.log(continueText);
+                process.stdout.write(continueText);
             }
         }
     }
