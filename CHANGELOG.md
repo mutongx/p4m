@@ -1,11 +1,12 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.1-unreleased] - 2023-11-21
 
 ### Added
 
 - Support `shelve` and `unshelve` command
   - Bug: Both of them have some duplicated codes with others. Will try to fix it in the future.
+- Use GitHub Actions to create releases
 
 ### Fixed
 
