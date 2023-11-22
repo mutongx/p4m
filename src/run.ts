@@ -30,18 +30,18 @@ export async function run(command: string, handler: Handler, args: string[]) {
         }
     }
     parser.end();
-    await new Promise((resolve) => { proc.on("exit", resolve); });
+    await new Promise((resolve) => { proc.on("close", resolve); });
     return await handler.finalize();
 }
 
 export async function runPassthrough(args: string[]) {
     const proc = child.spawn("p4", args, { stdio: "inherit" });
-    await new Promise((resolve) => { proc.on("exit", resolve); });
+    await new Promise((resolve) => { proc.on("close", resolve); });
 }
 
 export async function runEditor(args: string[]) {
     args.shift();
     const tty = await open("/dev/tty", "w+");
     const proc = child.spawn("vim", args, { stdio: [tty.createReadStream(), tty.createWriteStream()] });
-    await new Promise((resolve) => { proc.on("exit", resolve); });
+    await new Promise((resolve) => { proc.on("close", resolve); });
 }
