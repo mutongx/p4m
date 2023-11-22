@@ -59,3 +59,32 @@ export interface ShelvedFileMessage extends StatMessage {
     rev: string,
     action: string,
 }
+
+type ValueSpec = readonly [Storage: string, Type: string];
+type ObjectSpec = Record<string, ValueSpec | ObjectSpec>
+
+type StringToType<T extends string> = T extends "string" ? string : T extends "number" ? number : never;
+
+type P4Object<T extends ObjectSpec> = {
+    [K in keyof T]: T[K][0] extends "field" ? StringToType<T[K][1]> : T[K][0] extends "array" ? Array<StringToType<T[K][1]>> : never;
+};
+
+const MyTestSpecification = {
+    "stringField": ["field", "string"],
+    "numberField": ["field", "number"],
+    "stringArrayField": ["array", "string"],
+    "numberArrayField": ["array", "number"],
+    // "objectKey": {
+    //     "objArrayStringField": ["array", "string"],
+    //     "objArrayNumberField": ["array", "number"],
+    // }
+} as const;
+
+type MyTestType = P4Object<typeof MyTestSpecification>;
+
+const myTestObj: MyTestType = {
+    stringField: "fuck",
+    numberField: 10,
+    stringArrayField: ["abcd", "efgh"],
+    numberArrayField: [1, 2, 3],
+};
