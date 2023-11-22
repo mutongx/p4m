@@ -3,23 +3,18 @@ import { run } from "../run";
 import { actionConvert } from "../convert";
 import Handler from "./base";
 import ChangeHandler from "./_change";
-import { ChangeSpecificationMessage, ShelvedFileMessage, ErrorMessage, InfoMessage, StatMessage } from "./types";
+import { ErrorMessage, InfoMessage, StatMessage } from "./types";
+import { P4Object, ChangeConfigSpec, ShelvedFileSpec } from "./types";
 
 // TODO: Fix duplicated code with ChangeHandler
 
 const errorText = "Error in change specification.";
 const continueText = "Hit return to continue...";
 
-interface ShelvedFile {
-    depotFile: string,
-    rev: string,
-    action: string,
-}
-
 interface Shelve {
     name: string,
     description?: string,
-    files: ShelvedFile[],
+    files: P4Object<typeof ShelvedFileSpec>[],
 }
 
 export default class ShelveHandler extends Handler {
@@ -28,10 +23,10 @@ export default class ShelveHandler extends Handler {
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
 
-    descriptionPromise: Promise<ChangeSpecificationMessage | null> | null = null;
+    descriptionPromise: Promise<P4Object<typeof ChangeConfigSpec> | null> | null = null;
 
     stat(stat: StatMessage) {
-        const sf = stat as ShelvedFileMessage;
+        const sf = stat as unknown as P4Object<typeof ShelvedFileSpec>;
         if (sf.change) {
             if (this.shelve?.name && this.shelve.name !== sf.change) {
                 throw new Error(`change number is not consistent: ${this.shelve.name} and ${sf.change}`);
@@ -39,7 +34,7 @@ export default class ShelveHandler extends Handler {
             if (this.shelve === null) {
                 this.shelve = { name: sf.change, files: [] };
                 const handler = new ChangeHandler();
-                this.descriptionPromise = run("change", handler, ["-o", this.shelve.name]) as Promise<ChangeSpecificationMessage | null>;
+                this.descriptionPromise = run("change", handler, ["-o", this.shelve.name]) as Promise<P4Object<typeof ChangeConfigSpec> | null>;
             }
         }
         if (this.shelve === null) {

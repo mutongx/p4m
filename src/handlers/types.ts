@@ -20,42 +20,56 @@ export interface TextMessage {
     data: string,
 }
 
-export interface FileActionMessage extends StatMessage {
-    depotFile: string,
-    clientFile: string,
-    workRev: string,
-    action: string,
-    type: string,
-}
+type TypeSpec = string | ObjectSpec;
+type ValueSpec = readonly [Storage: string, Type: TypeSpec];
+interface ObjectSpec extends Record<string, ValueSpec> {}
 
-export interface FileStatusMessage extends StatMessage {
-    depotFile: string,
-    clientFile: string,
-    localFile: string,
-    workRev: string,
-    action: string,
-    change?: string,
-    type: string,
-}
+type TypeSpecToType<T extends TypeSpec> =
+    T extends ObjectSpec ? P4Object<T> :
+    T extends "string" ? string :
+    T extends "number" ? number :
+    never;
 
-export interface FileInfoDumpMessage extends StatMessage {
-    // TODO (mut)
-}
+export type P4Object<T extends ObjectSpec> = {
+    [K in keyof T]:
+	T[K][0] extends "required" ? TypeSpecToType<T[K][1]> :
+        T[K][0] extends "optional" ? TypeSpecToType<T[K][1]> | undefined :
+        T[K][0] extends "array" ? Array<TypeSpecToType<T[K][1]>> :
+        never;
+};
 
-export interface ChangeSpecificationMessage extends StatMessage {
-    Change: string,
-    Date: string,
-    Client: string,
-    User: string,
-    Status: string,
-    Type: string,
-    Description: string,
-}
+export const FileActionSpec = {
+    "depotFile": ["required", "string"],
+    "clientFile": ["required", "string"],
+    "workRev": ["required", "string"],
+    "action": ["required", "string"],
+    "type": ["required", "string"],
+} as const;
 
-export interface ShelvedFileMessage extends StatMessage {
-    change?: string,
-    openFiles?: string,
-    depotFile: string,
-    rev: string,
-    action: string,
-}
+export const FileStatusSpec = {
+    "depotFile": ["required", "string"],
+    "clientFile": ["required", "string"],
+    "localFile": ["required", "string"],
+    "workRev": ["required", "string"],
+    "action": ["required", "string"],
+    "change": ["optional", "string"],
+    "type": ["required", "string"],
+} as const;
+
+export const ChangeConfigSpec = {
+    "Change": ["required", "string"],
+    "Date": ["required", "string"],
+    "Client": ["required", "string"],
+    "User": ["required", "string"],
+    "Status": ["required", "string"],
+    "Type": ["required", "string"],
+    "Description": ["required", "string"]
+} as const;
+
+export const ShelvedFileSpec = {
+    "change": ["optional", "string"],
+    "openFiles": ["optional", "string"],
+    "depotFile": ["required", "string"],
+    "rev": ["required", "string"],
+    "action": ["required", "string"]
+} as const;

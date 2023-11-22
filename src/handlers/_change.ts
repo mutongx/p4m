@@ -1,18 +1,19 @@
 import Buffers from "../buffers";
 import Handler from "./base";
-import { ChangeSpecificationMessage, ErrorMessage, InfoMessage, StatMessage } from "./types";
+import { ErrorMessage, InfoMessage, StatMessage } from "./types";
+import { P4Object, ChangeConfigSpec } from "./types";
 
 const errorText = "Error in change specification.";
 const continueText = "Hit return to continue...";
 
 export default class ChangeHandler extends Handler {
 
-    change: ChangeSpecificationMessage | null = null;
+    change: P4Object<typeof ChangeConfigSpec> | null = null;
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
 
     stat(stat: StatMessage) {
-        this.change = stat as ChangeSpecificationMessage;
+        this.change = stat as unknown as P4Object<typeof ChangeConfigSpec>;
     }
 
     info(info: InfoMessage) {

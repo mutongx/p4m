@@ -1,8 +1,9 @@
 import Handler from "./base";
-import { ErrorMessage, FileActionMessage, InfoMessage, StatMessage } from "./types";
+import { ErrorMessage, InfoMessage, StatMessage } from "./types";
+import { P4Object, FileActionSpec } from "./types";
 import { actionConvert } from "../convert";
 
-interface FileAction extends FileActionMessage {
+interface FileAction extends P4Object<typeof FileActionSpec> {
     messages: string[];
 }
 
@@ -14,7 +15,7 @@ export default class AddEditDeleteHandler extends Handler {
     errors: ErrorMessage[] = [];
 
     stat(stat: StatMessage) {
-        const action: FileAction = { ...stat as FileActionMessage, messages: [] };
+        const action: FileAction = { ...stat as unknown as P4Object<typeof FileActionSpec>, messages: [] };
         this.actions.push(action);
         this.currentAction = action;
     }

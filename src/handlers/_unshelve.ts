@@ -1,13 +1,11 @@
 import Handler from "./base";
-import { ErrorMessage, InfoMessage, ShelvedFileMessage, StatMessage } from "./types";
+import { ErrorMessage, InfoMessage, StatMessage } from "./types";
+import { P4Object, ShelvedFileSpec } from "./types";
 import { actionConvert } from "../convert";
 
 // TODO: Fix duplicated code with AddEditDeleteHandler
 
-interface UnshelvedFile {
-    depotFile: string,
-    rev: string,
-    action: string,
+interface UnshelvedFile extends P4Object<typeof ShelvedFileSpec> {
     messages: string[],
 }
 
@@ -19,7 +17,7 @@ export default class UnshelveHandler extends Handler {
     errors: ErrorMessage[] = [];
 
     stat(stat: StatMessage) {
-        const uf: UnshelvedFile = { ...stat as ShelvedFileMessage, messages: [] };
+        const uf: UnshelvedFile = { ...stat as unknown as P4Object<typeof ShelvedFileSpec>, messages: [] };
         this.files.push(uf);
         this.currentFile = uf;
     }
