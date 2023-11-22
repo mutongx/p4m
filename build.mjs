@@ -10,6 +10,7 @@ await esbuild.build({
     outdir: "dist",
     platform: "node",
     format: "cjs",
+    sourcemap: true,
     banner: { "js": "#!/usr/bin/env node" },
 });
 
