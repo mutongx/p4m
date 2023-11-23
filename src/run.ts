@@ -1,6 +1,7 @@
 import child from "child_process";
 import { open } from "fs/promises";
 import { MarshalParser } from "./marshal";
+import { generateVimArgs } from "./editor";
 import Handler from "./handlers/base";
 
 function getCallSelfCommand() {
@@ -41,7 +42,8 @@ export async function runPassthrough(args: string[]) {
 
 export async function runEditor(args: string[]) {
     args.shift();
+    const vimArgs = await generateVimArgs(args);
     const tty = await open("/dev/tty", "w+");
-    const proc = child.spawn("vim", args, { stdio: [tty.createReadStream(), tty.createWriteStream()] });
+    const proc = child.spawn("vim", [...vimArgs, ...args], { stdio: [tty.createReadStream(), tty.createWriteStream()] });
     await new Promise((resolve) => { proc.on("close", resolve); });
 }
