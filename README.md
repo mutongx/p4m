@@ -40,6 +40,14 @@ Untracked files:
 No file(s) to reconcile.
 ```
 
+### Pure JavaScript API
+
+The command handler converts all `p4` command outputs to typed objects, making it possible to interact with them programatically. Hopefully, this library can be used in a VS Code plugin or something in the future.
+
+The implementation does not depend on Python, as it parses Python's marshal format in JavaScript.
+
+I'm not quite familiar with NPM so it is not available as a package for now. I will focus on the command-line override part for a while to improve the API design.
+
 ## Bugs
 
-- `p4 change -o` will not output in the correct format. Use `p4 -I change -o` as a temporary workaround for now (`p4m` will skip its processing if any `p4` command-line options are set).
+- `p4 change -o` will output in JSON instead of `p4`'s text format. Use `p4 -I change -o` as a temporary workaround for now (`p4m` will skip its processing if any `p4` command-line options are set).
