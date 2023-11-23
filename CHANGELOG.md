@@ -1,11 +1,12 @@
 # Changelog
 
-## [0.1.1-unreleased] - 2023-11-21
+## [0.2.0] - 2023-11-23
 
 ### Added
 
 - Support `shelve` and `unshelve` command
   - Bug: Both of them have some duplicated codes with others. Will try to fix it in the future.
+- A brand new object specification and parser to convert p4's dict object to JS object, with array support
 - Use GitHub Actions to create releases
 
 ### Changed
