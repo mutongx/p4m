@@ -8,6 +8,10 @@
   - Bug: Both of them have some duplicated codes with others. Will try to fix it in the future.
 - Use GitHub Actions to create releases
 
+### Changed
+
+- A lot of changes in the process of learning TypeScript, with far less type casts in code.
+
 ### Fixed
 
 - `change` command's interactive mode no longer throws exception when invalid change is specified
