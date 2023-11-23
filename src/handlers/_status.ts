@@ -1,5 +1,5 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
-import { parse, P4Object, ChangeConfigSpec, FileStatusSpec } from "./p4object";
+import { parse, P4Object, FileStatusSpec } from "./p4object";
 import ChangeHandler, { ChangeConfig } from "./_change";
 
 import { run } from "../run";
