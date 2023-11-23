@@ -23,7 +23,7 @@ export interface TextMessage {
     data: string,
 }
 
-export default abstract class Handler {
+export default abstract class Handler<T> {
 
     option: HandlerOption;
 
@@ -59,6 +59,6 @@ export default abstract class Handler {
 
     take(buffers: Buffers) { buffers; }
 
-    async finalize(): Promise<unknown> { return null; }
+    abstract finalize(): Promise<T>;
 
 }

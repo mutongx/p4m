@@ -12,7 +12,7 @@ function getCallSelfCommand() {
     return `${process.execPath} ${module.filename}`;
 }
 
-export async function run(command: string, handler: Handler, args: string[]) {
+export async function run<T>(command: string, handler: Handler<T>, args: string[]): Promise<T> {
     const proc = child.spawn("p4", ["-G", command, ...args], {
         stdio: ["inherit", "pipe", "inherit"],
         env: {
@@ -31,7 +31,7 @@ export async function run(command: string, handler: Handler, args: string[]) {
     }
     parser.end();
     await new Promise((resolve) => { proc.on("close", resolve); });
-    return await handler.finalize();
+    return handler.finalize();
 }
 
 export async function runPassthrough(args: string[]) {
