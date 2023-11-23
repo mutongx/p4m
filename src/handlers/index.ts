@@ -5,7 +5,7 @@ import ChangeHandler from "./_change";
 import ShelveHandler from "./_shelve";
 import UnshelveHandler from "./_unshelve";
 
-const mapping: { [key: string]: { new(option?: HandlerOption): Handler } } = {
+const mapping: Record<string, { new(option?: HandlerOption): Handler<unknown> }> = {
     add: AddEditDeleteHandler,
     edit: AddEditDeleteHandler,
     delete: AddEditDeleteHandler,

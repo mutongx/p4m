@@ -1,6 +1,6 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import { parse, P4Object, ChangeConfigSpec, ShelvedFileSpec } from "./p4object";
-import ChangeHandler from "./_change";
+import ChangeHandler, { ChangeConfig } from "./_change";
 
 import Buffers from "../buffers";
 import { run } from "../run";
@@ -11,19 +11,21 @@ import { actionConvert } from "../convert";
 const errorText = "Error in change specification.";
 const continueText = "Hit return to continue...";
 
-interface Shelve {
+type ShelvedFile = P4Object<typeof ShelvedFileSpec>;
+
+export interface Shelve {
     name: string,
     description?: string,
-    files: P4Object<typeof ShelvedFileSpec>[],
+    files: ShelvedFile[],
 }
 
-export default class ShelveHandler extends Handler {
+export default class ShelveHandler extends Handler<Shelve | null> {
 
     shelve: Shelve | null = null;
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
 
-    descriptionPromise: Promise<P4Object<typeof ChangeConfigSpec> | null> | null = null;
+    descriptionPromise: Promise<ChangeConfig | null> | null = null;
 
     stat(stat: StatMessage) {
         const sf = parse(ShelvedFileSpec, stat.data);
@@ -34,7 +36,7 @@ export default class ShelveHandler extends Handler {
             if (this.shelve === null) {
                 this.shelve = { name: sf.change, files: [] };
                 const handler = new ChangeHandler();
-                this.descriptionPromise = run("change", handler, ["-o", this.shelve.name]) as Promise<P4Object<typeof ChangeConfigSpec> | null>;
+                this.descriptionPromise = run("change", handler, ["-o", this.shelve.name]);
             }
         }
         if (this.shelve === null) {

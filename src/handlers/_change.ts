@@ -6,9 +6,11 @@ import Buffers from "../buffers";
 const errorText = "Error in change specification.";
 const continueText = "Hit return to continue...";
 
-export default class ChangeHandler extends Handler {
+export type ChangeConfig = P4Object<typeof ChangeConfigSpec>;
 
-    change: P4Object<typeof ChangeConfigSpec> | null = null;
+export default class ChangeHandler extends Handler<ChangeConfig | null> {
+
+    change: ChangeConfig | null = null;
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
 

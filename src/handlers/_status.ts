@@ -1,6 +1,6 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import { parse, P4Object, ChangeConfigSpec, FileStatusSpec } from "./p4object";
-import ChangeHandler from "./_change";
+import ChangeHandler, { ChangeConfig } from "./_change";
 
 import { run } from "../run";
 import { actionConvert } from "../convert";
@@ -9,20 +9,20 @@ interface FileStatus extends P4Object<typeof FileStatusSpec> {
     messages: string[];
 }
 
-interface Change {
+export interface Change {
     name: string,
     description?: string,
     files: FileStatus[],
 }
 
-export default class StatusHandler extends Handler {
+export default class StatusHandler extends Handler<Record<string, Change>> {
 
     currentFile: FileStatus | null = null;
-    changes: { [key: string]: Change } = {};
+    changes: Record<string, Change> = {};
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
 
-    descriptionPromises: Promise<P4Object<typeof ChangeConfigSpec> | null>[] = [];
+    descriptionPromises: Promise<ChangeConfig | null>[] = [];
 
     stat(stat: StatMessage) {
         const file: FileStatus = { ...parse(FileStatusSpec, stat.data), messages: [] };
@@ -31,7 +31,7 @@ export default class StatusHandler extends Handler {
             this.changes[change] = { name: change, files: [] };
             if (change != "default" && change != "") {
                 const handler = new ChangeHandler();
-                this.descriptionPromises.push(run("change", handler, ["-o", change]) as Promise<P4Object<typeof ChangeConfigSpec> | null>);
+                this.descriptionPromises.push(run("change", handler, ["-o", change]));
             }
         }
         this.changes[change].files.push(file);

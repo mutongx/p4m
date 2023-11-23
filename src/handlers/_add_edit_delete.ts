@@ -3,11 +3,11 @@ import { parse, P4Object, FileActionSpec } from "./p4object";
 
 import { actionConvert } from "../convert";
 
-interface FileAction extends P4Object<typeof FileActionSpec> {
+export interface FileAction extends P4Object<typeof FileActionSpec> {
     messages: string[];
 }
 
-export default class AddEditDeleteHandler extends Handler {
+export default class AddEditDeleteHandler extends Handler<FileAction[]> {
 
     currentAction: FileAction | null = null;
     actions: FileAction[] = [];

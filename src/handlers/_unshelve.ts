@@ -5,11 +5,11 @@ import { actionConvert } from "../convert";
 
 // TODO: Fix duplicated code with AddEditDeleteHandler
 
-interface UnshelvedFile extends P4Object<typeof ShelvedFileSpec> {
+export interface UnshelvedFile extends P4Object<typeof ShelvedFileSpec> {
     messages: string[],
 }
 
-export default class UnshelveHandler extends Handler {
+export default class UnshelveHandler extends Handler<UnshelvedFile[]> {
 
     currentFile: UnshelvedFile | null = null;
     files: UnshelvedFile[] = [];
