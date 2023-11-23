@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.0-unreleased] - 2023-11-24
+
+### Added
+
+- When called as an editor, look for p4's placeholder text and let `vim` jump to its position
+
 ## [0.2.0] - 2023-11-23
 
 ### Added
