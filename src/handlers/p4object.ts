@@ -51,3 +51,7 @@ export const ShelvedFileSpec = {
     "rev": ["required", "string"],
     "action": ["required", "string"]
 } as const;
+
+export function parse<T extends ObjectSpec>(spec: T, message: Map<string, unknown>): P4Object<T> {
+    return Object.fromEntries(message) as unknown as P4Object<T>;
+}

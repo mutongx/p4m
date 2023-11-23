@@ -1,5 +1,5 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
-import { P4Object, ChangeConfigSpec, ShelvedFileSpec } from "./p4object";
+import { parse, P4Object, ChangeConfigSpec, ShelvedFileSpec } from "./p4object";
 import ChangeHandler from "./_change";
 
 import Buffers from "../buffers";
@@ -26,7 +26,7 @@ export default class ShelveHandler extends Handler {
     descriptionPromise: Promise<P4Object<typeof ChangeConfigSpec> | null> | null = null;
 
     stat(stat: StatMessage) {
-        const sf = stat as unknown as P4Object<typeof ShelvedFileSpec>;
+        const sf = parse(ShelvedFileSpec, stat.data);
         if (sf.change) {
             if (this.shelve?.name && this.shelve.name !== sf.change) {
                 throw new Error(`change number is not consistent: ${this.shelve.name} and ${sf.change}`);

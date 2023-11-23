@@ -1,5 +1,5 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
-import { P4Object, ChangeConfigSpec, FileStatusSpec } from "./p4object";
+import { parse, P4Object, ChangeConfigSpec, FileStatusSpec } from "./p4object";
 import ChangeHandler from "./_change";
 
 import { run } from "../run";
@@ -25,7 +25,7 @@ export default class StatusHandler extends Handler {
     descriptionPromises: Promise<P4Object<typeof ChangeConfigSpec> | null>[] = [];
 
     stat(stat: StatMessage) {
-        const file: FileStatus = { ...stat as unknown as P4Object<typeof FileStatusSpec>, messages: [] };
+        const file: FileStatus = { ...parse(FileStatusSpec, stat.data), messages: [] };
         const change = file.change || "";
         if (this.changes[change] === undefined) {
             this.changes[change] = { name: change, files: [] };

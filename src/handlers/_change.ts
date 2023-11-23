@@ -1,5 +1,5 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
-import { P4Object, ChangeConfigSpec } from "./p4object";
+import { parse, P4Object, ChangeConfigSpec } from "./p4object";
 
 import Buffers from "../buffers";
 
@@ -13,7 +13,7 @@ export default class ChangeHandler extends Handler {
     errors: ErrorMessage[] = [];
 
     stat(stat: StatMessage) {
-        this.change = stat as unknown as P4Object<typeof ChangeConfigSpec>;
+        this.change = parse(ChangeConfigSpec, stat.data);
     }
 
     info(info: InfoMessage) {

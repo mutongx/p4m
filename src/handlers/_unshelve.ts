@@ -1,5 +1,5 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
-import { P4Object, ShelvedFileSpec } from "./p4object";
+import { parse, P4Object, ShelvedFileSpec } from "./p4object";
 
 import { actionConvert } from "../convert";
 
@@ -17,7 +17,7 @@ export default class UnshelveHandler extends Handler {
     errors: ErrorMessage[] = [];
 
     stat(stat: StatMessage) {
-        const uf: UnshelvedFile = { ...stat as unknown as P4Object<typeof ShelvedFileSpec>, messages: [] };
+        const uf: UnshelvedFile = { ...parse(ShelvedFileSpec, stat.data), messages: [] };
         this.files.push(uf);
         this.currentFile = uf;
     }
