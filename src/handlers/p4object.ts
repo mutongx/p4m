@@ -1,25 +1,3 @@
-export interface StatMessage {
-    code: "stat",
-}
-
-export interface InfoMessage {
-    code: "info",
-    level: number,
-    data: string,
-}
-
-export interface ErrorMessage {
-    code: "error",
-    data: string,
-    severity: number,
-    generic: 1,
-}
-
-export interface TextMessage {
-    code: "text",
-    data: string,
-}
-
 type TypeSpec = string | ObjectSpec;
 type ValueSpec = readonly [Storage: string, Type: TypeSpec];
 interface ObjectSpec extends Record<string, ValueSpec> {}

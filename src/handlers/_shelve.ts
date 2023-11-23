@@ -1,10 +1,10 @@
+import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
+import { P4Object, ChangeConfigSpec, ShelvedFileSpec } from "./p4object";
+import ChangeHandler from "./_change";
+
 import Buffers from "../buffers";
 import { run } from "../run";
 import { actionConvert } from "../convert";
-import Handler from "./base";
-import ChangeHandler from "./_change";
-import { ErrorMessage, InfoMessage, StatMessage } from "./types";
-import { P4Object, ChangeConfigSpec, ShelvedFileSpec } from "./types";
 
 // TODO: Fix duplicated code with ChangeHandler
 

@@ -1,8 +1,26 @@
 import Buffers from "../buffers";
-import { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "./types";
 
 export interface HandlerOption {
     root?: boolean;
+}
+
+export interface StatMessage {
+    data: Map<string, unknown>,
+}
+
+export interface InfoMessage {
+    level: number,
+    data: string,
+}
+
+export interface ErrorMessage {
+    data: string,
+    severity: number,
+    generic: number,
+}
+
+export interface TextMessage {
+    data: string,
 }
 
 export default abstract class Handler {
@@ -20,9 +38,10 @@ export default abstract class Handler {
 
     feed(obj: Map<string, unknown>) {
         const code = obj.get("code");
+        obj.delete("code");
         switch (code) {
         case "stat":
-            this.stat(Object.fromEntries(obj) as unknown as StatMessage);
+            this.stat({ data: obj });
             break;
         case "info":
             this.info(Object.fromEntries(obj) as unknown as InfoMessage);

@@ -1,7 +1,7 @@
-import Handler from "./base";
+import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
+import { P4Object, ChangeConfigSpec, FileStatusSpec } from "./p4object";
 import ChangeHandler from "./_change";
-import { ErrorMessage, InfoMessage, StatMessage } from "./types";
-import { P4Object, ChangeConfigSpec, FileStatusSpec } from "./types";
+
 import { run } from "../run";
 import { actionConvert } from "../convert";
 

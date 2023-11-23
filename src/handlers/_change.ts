@@ -1,7 +1,7 @@
+import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
+import { P4Object, ChangeConfigSpec } from "./p4object";
+
 import Buffers from "../buffers";
-import Handler from "./base";
-import { ErrorMessage, InfoMessage, StatMessage } from "./types";
-import { P4Object, ChangeConfigSpec } from "./types";
 
 const errorText = "Error in change specification.";
 const continueText = "Hit return to continue...";

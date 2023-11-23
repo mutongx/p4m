@@ -1,6 +1,6 @@
-import Handler from "./base";
-import { ErrorMessage, InfoMessage, StatMessage } from "./types";
-import { P4Object, ShelvedFileSpec } from "./types";
+import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
+import { P4Object, ShelvedFileSpec } from "./p4object";
+
 import { actionConvert } from "../convert";
 
 // TODO: Fix duplicated code with AddEditDeleteHandler

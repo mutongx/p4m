@@ -1,6 +1,6 @@
-import Handler from "./base";
-import { ErrorMessage, InfoMessage, StatMessage } from "./types";
-import { P4Object, FileActionSpec } from "./types";
+import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
+import { P4Object, FileActionSpec } from "./p4object";
+
 import { actionConvert } from "../convert";
 
 interface FileAction extends P4Object<typeof FileActionSpec> {
