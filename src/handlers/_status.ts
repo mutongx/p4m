@@ -54,18 +54,18 @@ export default class StatusHandler extends Handler<Record<string, Change>> {
     }
 
     async finalize() {
-        if (this.option.root) {
-            const changesDetail = await Promise.all(this.descriptionPromises);
-            for (const detail of changesDetail) {
-                if (!detail) {
-                    throw new Error("p4 change returned nothing");
-                }
-                const change = this.changes[detail.Change];
-                if (change === undefined) {
-                    throw new Error("p4 change returned non-exist changelist");
-                }
-                change.description = detail.Description.trim();
+        const changesDetail = await Promise.all(this.descriptionPromises);
+        for (const detail of changesDetail) {
+            if (!detail) {
+                throw new Error("p4 change returned nothing");
             }
+            const change = this.changes[detail.Change];
+            if (change === undefined) {
+                throw new Error("p4 change returned non-exist changelist");
+            }
+            change.description = detail.Description.trim();
+        }
+        if (this.option.root) {
             for (const [name, change] of Object.entries(this.changes)) {
                 if (name == "") {
                     console.log("Untracked files:");

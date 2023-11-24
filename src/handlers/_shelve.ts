@@ -70,9 +70,11 @@ export default class ShelveHandler extends Handler<Shelve | null> {
     }
 
     async finalize() {
+        if (this.shelve) {
+            this.shelve.description = (await this.descriptionPromise)?.Description.trim();
+        }
         if (this.option.root) {
             if (this.shelve) {
-                this.shelve.description = (await this.descriptionPromise)?.Description.trim();
                 console.log(`Shelved changelist #${this.shelve.name}: ${this.shelve.description}`);
                 for (const file of this.shelve.files) {
                     const color = ActionTextsMapping.color[file.action];
