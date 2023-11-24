@@ -1,11 +1,11 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import { parse, P4Object, ShelvedFileSpec } from "./p4object";
-import { Texts } from "../consts";
+
 import ChangeHandler, { ChangeConfig } from "./_change";
 
 import Buffers from "../buffers";
 import { run } from "../run";
-import { actionConvert } from "../convert";
+import { Texts, ActionTextsMapping } from "../consts";
 
 // TODO: Fix duplicated code with ChangeHandler
 
@@ -75,8 +75,8 @@ export default class ShelveHandler extends Handler<Shelve | null> {
                 this.shelve.description = (await this.descriptionPromise)?.Description.trim();
                 console.log(`Shelved changelist #${this.shelve.name}: ${this.shelve.description}`);
                 for (const file of this.shelve.files) {
-                    const color = actionConvert.color[file.action];
-                    console.log(color(`\t[${actionConvert.short[file.action]}] ${file.depotFile}`));
+                    const color = ActionTextsMapping.color[file.action];
+                    console.log(color(`\t[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
                 }
             }
             for (const message of this.messages) {

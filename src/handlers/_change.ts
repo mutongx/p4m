@@ -1,8 +1,8 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
-import { Texts } from "../consts";
 import { parse, P4Object, ChangeConfigSpec } from "./p4object";
 
 import Buffers from "../buffers";
+import { Texts } from "../consts";
 
 export type ChangeConfig = P4Object<typeof ChangeConfigSpec>;
 

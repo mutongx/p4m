@@ -1,7 +1,7 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import { parse, P4Object, ShelvedFileSpec } from "./p4object";
 
-import { actionConvert } from "../convert";
+import { ActionTextsMapping } from "../consts";
 
 // TODO: Fix duplicated code with AddEditDeleteHandler
 
@@ -40,8 +40,8 @@ export default class UnshelveHandler extends Handler<UnshelvedFile[]> {
     async finalize() {
         if (this.option.root) {
             for (const file of this.files) {
-                const color = actionConvert.color[file.action];
-                console.log(color(`[${actionConvert.short[file.action]}] ${file.depotFile}`));
+                const color = ActionTextsMapping.color[file.action];
+                console.log(color(`[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
                 for (const message of file.messages) {
                     console.log(`  - ${message}`);
                 }

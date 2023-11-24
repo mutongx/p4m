@@ -1,7 +1,7 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import { parse, P4Object, FileActionSpec } from "./p4object";
 
-import { actionConvert } from "../convert";
+import { ActionTextsMapping } from "../consts";
 
 export interface FileAction extends P4Object<typeof FileActionSpec> {
     messages: string[];
@@ -38,8 +38,8 @@ export default class AddEditDeleteHandler extends Handler<FileAction[]> {
     async finalize() {
         if (this.option.root) {
             for (const action of this.actions) {
-                const color = actionConvert.color[action.action];
-                console.log(color(`[${actionConvert.short[action.action]}] ${action.depotFile}`));
+                const color = ActionTextsMapping.color[action.action];
+                console.log(color(`[${ActionTextsMapping.short[action.action]}] ${action.depotFile}`));
                 for (const message of action.messages) {
                     console.log(`  - ${message}`);
                 }
