@@ -1,6 +1,5 @@
 import fs from "fs/promises";
-
-const enterText = "<enter description here>";
+import { Texts } from "./consts";
 
 export async function generateVimArgs(args: string[]): Promise<string[]> {
     if (args.length != 1) {
@@ -11,14 +10,14 @@ export async function generateVimArgs(args: string[]): Promise<string[]> {
     const file = await fs.open(args[0]);
     for await (const line of file.readLines()) {
         enterLine += 1;
-        if (line === `\t${enterText}`) {
+        if (line === `\t${Texts.descriptionPlaceholder}`) {
             enterFound = true;
             break;
         }
     }
     await file.close();
     if (enterFound) {
-        return [`+${enterLine}`, "-c", `s/${enterText}//`, "-c", "startinsert"];
+        return [`+${enterLine}`, "-c", `s/${Texts.descriptionPlaceholder}//`, "-c", "startinsert"];
     } else {
         return [];
     }

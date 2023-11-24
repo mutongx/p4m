@@ -1,5 +1,6 @@
 import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import { parse, P4Object, ShelvedFileSpec } from "./p4object";
+import { Texts } from "../consts";
 import ChangeHandler, { ChangeConfig } from "./_change";
 
 import Buffers from "../buffers";
@@ -7,9 +8,6 @@ import { run } from "../run";
 import { actionConvert } from "../convert";
 
 // TODO: Fix duplicated code with ChangeHandler
-
-const errorText = "Error in change specification.";
-const continueText = "Hit return to continue...";
 
 type ShelvedFile = P4Object<typeof ShelvedFileSpec>;
 
@@ -56,17 +54,17 @@ export default class ShelveHandler extends Handler<Shelve | null> {
     take(buffers: Buffers) {
         const error = this.errors[this.errors.length - 1];
         if (this.option.root && error) {
-            if (error.data.startsWith(errorText)) {
+            if (error.data.startsWith(Texts.errorInChange)) {
                 // Print out the error data and pop it out
                 console.log(error.data.trim());
                 this.errors.pop();
                 // Consume the continuation prompt, don't give it to MarshalParser
-                const continueBuffer = buffers.consume(continueText.length);
-                if (!continueBuffer || continueBuffer.toString() !== continueText) {
+                const continueBuffer = buffers.consume(Texts.hitReturnToContinue.length);
+                if (!continueBuffer || continueBuffer.toString() !== Texts.hitReturnToContinue) {
                     throw new Error("failed to parse continue text");
                 }
                 // Print it out to user
-                process.stdout.write(continueText);
+                process.stdout.write(Texts.hitReturnToContinue);
             }
         }
     }
