@@ -7,8 +7,11 @@ async function main() {
         return await runPassthrough(args);
     }
     if (args[0].substring(0, 1) === "-") {
-        if (args[0] == "-E") {
-            return await runEditor(args);
+        if (args[0].startsWith("--P4M-")) {
+            if (args[0] == "--P4M-EDITOR") {
+                return await runEditor(args);
+            }
+            throw new Error(`unknown command override: ${args[0]}`);
         }
         return await runPassthrough(args);
     }

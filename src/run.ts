@@ -5,12 +5,15 @@ import { generateVimArgs } from "./editor";
 import Handler from "./handlers/base";
 
 function getCallSelfCommand() {
+    function quote(s: string) {
+        return `'${s.replaceAll("'", "'\"'\"'")}'`;
+    }
     // TODO (mut): Use shell quote for return value
     if (process.execPath == module.filename) {
         // Running in SEA mode
-        return process.execPath;
+        return quote(process.execPath);
     }
-    return `${process.execPath} ${module.filename}`;
+    return `${quote(process.execPath)} ${quote(module.filename)}`;
 }
 
 export async function run<T>(command: string, handler: Handler<T>, args: string[]): Promise<T> {
@@ -18,7 +21,7 @@ export async function run<T>(command: string, handler: Handler<T>, args: string[
         stdio: ["inherit", "pipe", "inherit"],
         env: {
             ...process.env,
-            "P4EDITOR": `${getCallSelfCommand()} -E`,
+            "P4EDITOR": `${getCallSelfCommand()} --P4M-EDITOR`,
         },
     });
     const parser = new MarshalParser();
