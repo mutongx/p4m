@@ -53,6 +53,13 @@ export const ShelvedFileSpec = {
     "action": ["required", "string"],
 } as const;
 
+export const DiffItemSpec = {
+    "depotFile": ["required", "string"],
+    "clientFile": ["required", "string"],
+    "rev": ["required", "string"],
+    "type": ["required", "string"],
+} as const;
+
 export function parse<T extends ObjectSpec>(spec: T, message: Map<string, unknown>): P4Object<T> {
     const result: unknown = {};
     const prefixes: Record<string, string[]> = {};

@@ -4,6 +4,7 @@ import StatusHandler from "./_status";
 import ChangeHandler from "./_change";
 import ShelveHandler from "./_shelve";
 import UnshelveHandler from "./_unshelve";
+import DiffHandler from "./_diff";
 
 const mapping: Record<string, { new(option?: HandlerOption): Handler<unknown> }> = {
     add: AddEditDeleteHandler,
@@ -14,6 +15,7 @@ const mapping: Record<string, { new(option?: HandlerOption): Handler<unknown> }>
     change: ChangeHandler,
     shelve: ShelveHandler,
     unshelve: UnshelveHandler,
+    diff: DiffHandler,
 };
 
 export default mapping;
