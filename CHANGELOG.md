@@ -6,6 +6,10 @@
 
 - When called as an editor, look for p4's placeholder text and let `vim` jump to its position
 
+### Fixed
+
+- P4EDITOR environment variable is now correctly quoted in case of unsafe character like space in path
+
 ## [0.2.0] - 2023-11-23
 
 ### Added
