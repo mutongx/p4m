@@ -11,6 +11,7 @@ By installing `p4m` to `PATH` and setting `alias p4=p4m`, p4m can act as a drop-
 Currently supported commands are:
 
 - `p4 add` / `p4 edit` / `p4 delete`
+- `p4 diff`
 - `p4 shelve` / `p4 unshelve`
 - `p4 status`
 
