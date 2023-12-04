@@ -21,7 +21,7 @@ export default class DiffHandler extends Handler<Diff[]> {
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
 
-    constructor(option: HandlerOption) {
+    constructor(option: HandlerOption = {}) {
         super(option);
 
         for (const arg of this.option.args || []) {
