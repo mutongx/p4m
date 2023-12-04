@@ -129,7 +129,12 @@ export default class DiffHandler extends Handler<Diff[]> {
                 }
                 console.log();
             }
-            // TODO: Print error and messages
+            for (const message of this.messages) {
+                console.log(message.data.trim());
+            }
+            for (const error of this.errors) {
+                console.error(error.data.trim());
+            }
         }
         return this.diffs;
     }
