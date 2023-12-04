@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.1] - 2023-12-04
+
+### Fixed
+
+- `p4 diff` will split output into multiple text chunks, and p4m can now concancate them instead of losing data
+
 ## [0.3.0] - 2023-12-04
 
 ### Added
