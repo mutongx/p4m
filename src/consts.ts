@@ -36,3 +36,11 @@ export const ActionTextsMapping = {
         "move/delete": chalk.red,
     } as Record<string, ChalkInstance>,
 };
+
+export const DiffColorMapping = {
+    default: chalk.white,
+    context: chalk.cyan,
+    modified: chalk.yellow,
+    deleted: chalk.red,
+    added: chalk.green,
+};
