@@ -8,7 +8,6 @@ function getCallSelfCommand() {
     function quote(s: string) {
         return `'${s.replaceAll("'", "'\"'\"'")}'`;
     }
-    // TODO (mut): Use shell quote for return value
     if (process.execPath == module.filename) {
         // Running in SEA mode
         return quote(process.execPath);
