@@ -5,6 +5,7 @@
 ### Added
 
 - When called as an editor, look for p4's placeholder text and let `vim` jump to its position
+- Support `diff` command with color
 
 ### Fixed
 
