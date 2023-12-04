@@ -43,7 +43,7 @@ export default class DiffHandler extends Handler<Diff[]> {
     }
 
     stat(stat: StatMessage) {
-        const d = { ...parse(DiffItemSpec, stat.data), data: null };
+        const d = { ...parse(DiffItemSpec, stat.data), data: "" };
         this.currentDiff = d;
         this.diffs.push(d);
     }
@@ -57,7 +57,7 @@ export default class DiffHandler extends Handler<Diff[]> {
     }
 
     text(text: TextMessage) {
-        this.currentDiff!.data = text.data;
+        this.currentDiff!.data += text.data;
     }
 
     *iterateLine(s: string) {
