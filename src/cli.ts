@@ -20,7 +20,7 @@ async function main() {
         return await runPassthrough(args);
     }
     const command = args.shift()!;
-    const handler = new handlerClass({root: true});
+    const handler = new handlerClass({ root: true, args: args });
     return await run(command, handler, args);
 }
 

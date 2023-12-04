@@ -2,6 +2,7 @@ import Buffers from "../buffers";
 
 export interface HandlerOption {
     root?: boolean;
+    args?: string[];
 }
 
 export interface StatMessage {
