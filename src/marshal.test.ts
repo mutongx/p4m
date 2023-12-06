@@ -12,10 +12,10 @@ function generate(objects: string[], version: number = 0) {
     return child.spawn("python3", ["-c", lines.join("\n")], { stdio: ["pipe", "pipe", 2] });
 }
 
-async function parse(process: ChildProcess) {
+async function parse(proc: ChildProcess) {
     const parser = new MarshalParser();
     const items: unknown[] = [];
-    for await (const item of parser.consume(process.stdout!)) {
+    for await (const item of parser.consume(proc.stdout!)) {
         items.push(item);
     }
     return items;
