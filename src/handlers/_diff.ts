@@ -139,6 +139,7 @@ export default class DiffHandler extends Handler<Diff[]> {
             for (const message of this.messages) {
                 this.print(message.data.trim());
             }
+            // TODO: Correctly handle errors
             for (const error of this.errors) {
                 this.print(error.data.trim());
             }
