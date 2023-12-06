@@ -34,7 +34,7 @@ export default class ShelveHandler extends Handler<Shelve | null> {
             if (this.shelve === null) {
                 this.shelve = { name: sf.change, files: [] };
                 const handler = new ChangeHandler();
-                this.descriptionPromise = run("change", handler, ["-o", this.shelve.name]);
+                this.descriptionPromise = run("change", ["-o", this.shelve.name], handler);
             }
         }
         if (this.shelve === null) {

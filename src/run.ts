@@ -1,22 +1,21 @@
-import child from "child_process";
+import { spawn } from "child_process";
 import { open } from "fs/promises";
 import { MarshalParser } from "./marshal";
 import { generateVimArgs } from "./editor";
 import Handler from "./handlers/base";
 
-function getCallSelfCommand() {
-    function quote(s: string) {
-        return `'${s.replaceAll("'", "'\"'\"'")}'`;
+export async function run<T>(command: string, args: string[], handler: Handler<T>): Promise<T> {
+    function getCallSelfCommand() {
+        function quote(s: string) {
+            return `'${s.replaceAll("'", "'\"'\"'")}'`;
+        }
+        if (process.execPath == module.filename) {
+            // Running in SEA mode
+            return quote(process.execPath);
+        }
+        return `${quote(process.execPath)} ${quote(module.filename)}`;
     }
-    if (process.execPath == module.filename) {
-        // Running in SEA mode
-        return quote(process.execPath);
-    }
-    return `${quote(process.execPath)} ${quote(module.filename)}`;
-}
-
-export async function run<T>(command: string, handler: Handler<T>, args: string[]): Promise<T> {
-    const proc = child.spawn("p4", ["-G", command, ...args], {
+    const proc = spawn("p4", ["-G", command, ...args], {
         stdio: ["inherit", "pipe", "inherit"],
         env: {
             ...process.env,
@@ -38,7 +37,7 @@ export async function run<T>(command: string, handler: Handler<T>, args: string[
 }
 
 export async function runPassthrough(args: string[]) {
-    const proc = child.spawn("p4", args, { stdio: "inherit" });
+    const proc = spawn("p4", args, { stdio: "inherit" });
     await new Promise((resolve) => { proc.on("close", resolve); });
 }
 
@@ -46,6 +45,6 @@ export async function runEditor(args: string[]) {
     args.shift();
     const vimArgs = await generateVimArgs(args);
     const tty = await open("/dev/tty", "w+");
-    const proc = child.spawn("vim", [...vimArgs, ...args], { stdio: [tty.createReadStream(), tty.createWriteStream()] });
+    const proc = spawn("vim", [...vimArgs, ...args], { stdio: [tty.createReadStream(), tty.createWriteStream()] });
     await new Promise((resolve) => { proc.on("close", resolve); });
 }
