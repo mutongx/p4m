@@ -41,16 +41,16 @@ export default class UnshelveHandler extends Handler<UnshelvedFile[]> {
         if (this.option.root) {
             for (const file of this.files) {
                 const color = ActionTextsMapping.color[file.action];
-                console.log(color(`[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
+                this.print(color(`[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
                 for (const message of file.messages) {
-                    console.log(`  - ${message}`);
+                    this.print(`  - ${message}`);
                 }
             }
             for (const message of this.messages) {
-                console.log(message.data.trim());
+                this.print(message.data.trim());
             }
             for (const error of this.errors) {
-                console.log(error.data.trim());
+                this.print(error.data.trim());
             }
         }
         return this.files;

@@ -39,16 +39,16 @@ export default class AddEditDeleteHandler extends Handler<FileAction[]> {
         if (this.option.root) {
             for (const action of this.actions) {
                 const color = ActionTextsMapping.color[action.action];
-                console.log(color(`[${ActionTextsMapping.short[action.action]}] ${action.depotFile}`));
+                this.print(color(`[${ActionTextsMapping.short[action.action]}] ${action.depotFile}`));
                 for (const message of action.messages) {
-                    console.log(`  - ${message}`);
+                    this.print(`  - ${message}`);
                 }
             }
             for (const message of this.messages) {
-                console.log(message.data.trim());
+                this.print(message.data.trim());
             }
             for (const error of this.errors) {
-                console.log(error.data.trim());
+                this.print(error.data.trim());
             }
         }
         return this.actions;

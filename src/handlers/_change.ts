@@ -29,7 +29,7 @@ export default class ChangeHandler extends Handler<ChangeConfig | null> {
         if (this.option.root && error) {
             if (error.data.startsWith(Texts.errorInChange)) {
                 // Print out the error data and pop it out
-                console.log(error.data.trim());
+                this.print(error.data.trim());
                 this.errors.pop();
                 // Consume the continuation prompt, don't give it to MarshalParser
                 const continueBuffer = buffers.consume(Texts.hitReturnToContinue.length);
@@ -37,7 +37,7 @@ export default class ChangeHandler extends Handler<ChangeConfig | null> {
                     throw new Error("failed to parse continue text");
                 }
                 // Print it out to user
-                process.stdout.write(Texts.hitReturnToContinue);
+                this.print(Texts.hitReturnToContinue, false);
             }
         }
     }
@@ -46,13 +46,13 @@ export default class ChangeHandler extends Handler<ChangeConfig | null> {
         if (this.option.root) {
             if (this.change) {
                 // TODO: Output as Perforce's text format
-                console.log(JSON.stringify(this.change, undefined, 2));
+                this.print(JSON.stringify(this.change, undefined, 2));
             }
             for (const message of this.messages) {
-                console.log(message.data.trim());
+                this.print(message.data.trim());
             }
             for (const error of this.errors) {
-                console.error(error.data.trim());
+                this.print(error.data.trim());
             }
         }
         return this.change;

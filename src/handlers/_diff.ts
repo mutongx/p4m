@@ -42,6 +42,13 @@ export default class DiffHandler extends Handler<Diff[]> {
         }
     }
 
+    flags() {
+        if (this.option.root) {
+            return { pager: true };
+        }
+        return {};
+    }
+
     stat(stat: StatMessage) {
         const d = { ...parse(DiffItemSpec, stat.data), data: "" };
         this.currentDiff = d;
@@ -122,18 +129,18 @@ export default class DiffHandler extends Handler<Diff[]> {
     async finalize() {
         if (this.option.root) {
             for (const d of this.diffs) {
-                console.log(`===== ${d.depotFile}#${d.rev} - ${d.clientFile} =====`);
-                console.log();
+                this.print(`===== ${d.depotFile}#${d.rev} - ${d.clientFile} =====`);
+                this.print();
                 for (const line of this.iterateLine(d.data!)) {
-                    console.log(this.getColor(line)(line));
+                    this.print(this.getColor(line)(line));
                 }
-                console.log();
+                this.print();
             }
             for (const message of this.messages) {
-                console.log(message.data.trim());
+                this.print(message.data.trim());
             }
             for (const error of this.errors) {
-                console.error(error.data.trim());
+                this.print(error.data.trim());
             }
         }
         return this.diffs;

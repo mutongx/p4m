@@ -68,27 +68,27 @@ export default class StatusHandler extends Handler<Record<string, Change>> {
         if (this.option.root) {
             for (const [name, change] of Object.entries(this.changes)) {
                 if (name == "") {
-                    console.log("Untracked files:");
-                    console.log("  (use p4 add/edit/delete/reconcile to track them)");
+                    this.print("Untracked files:");
+                    this.print("  (use p4 add/edit/delete/reconcile to track them)");
                 } else if (name == "default") {
-                    console.log("Changelist default:");
-                    console.log("  (use p4 shelve to create a new changelist and push them to server)");
-                    console.log("  (use p4 reopen to move them to a numbered changelist)");
+                    this.print("Changelist default:");
+                    this.print("  (use p4 shelve to create a new changelist and push them to server)");
+                    this.print("  (use p4 reopen to move them to a numbered changelist)");
                 } else if (change) {
-                    console.log(`Changelist #${change.name}: ${change.description}`);
-                    console.log("  (use p4 shelve to push them to server)");
+                    this.print(`Changelist #${change.name}: ${change.description}`);
+                    this.print("  (use p4 shelve to push them to server)");
                 }
                 for (const file of change.files) {
                     const color = ActionTextsMapping.color[file.action];
-                    console.log(color(`\t[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
+                    this.print(color(`\t[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
                 }
-                console.log();
+                this.print();
             }
             for (const message of this.messages) {
-                console.log(message.data.trim());
+                this.print(message.data.trim());
             }
             for (const error of this.errors) {
-                console.error(error.data.trim());
+                this.print(error.data.trim());
             }
         }
         return this.changes;

@@ -56,7 +56,7 @@ export default class ShelveHandler extends Handler<Shelve | null> {
         if (this.option.root && error) {
             if (error.data.startsWith(Texts.errorInChange)) {
                 // Print out the error data and pop it out
-                console.log(error.data.trim());
+                this.print(error.data.trim());
                 this.errors.pop();
                 // Consume the continuation prompt, don't give it to MarshalParser
                 const continueBuffer = buffers.consume(Texts.hitReturnToContinue.length);
@@ -64,7 +64,7 @@ export default class ShelveHandler extends Handler<Shelve | null> {
                     throw new Error("failed to parse continue text");
                 }
                 // Print it out to user
-                process.stdout.write(Texts.hitReturnToContinue);
+                this.print(Texts.hitReturnToContinue, false);
             }
         }
     }
@@ -75,17 +75,17 @@ export default class ShelveHandler extends Handler<Shelve | null> {
         }
         if (this.option.root) {
             if (this.shelve) {
-                console.log(`Shelved changelist #${this.shelve.name}: ${this.shelve.description}`);
+                this.print(`Shelved changelist #${this.shelve.name}: ${this.shelve.description}`);
                 for (const file of this.shelve.files) {
                     const color = ActionTextsMapping.color[file.action];
-                    console.log(color(`\t[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
+                    this.print(color(`\t[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
                 }
             }
             for (const message of this.messages) {
-                console.log(message.data.trim());
+                this.print(message.data.trim());
             }
             for (const error of this.errors) {
-                console.error(error.data.trim());
+                this.print(error.data.trim());
             }
         }
         return this.shelve;
