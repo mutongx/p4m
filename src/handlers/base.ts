@@ -32,34 +32,30 @@ export default abstract class Handler<T> {
         this.option = option;
     }
 
-    stat(stat: StatMessage) { stat; }
-    info(info: InfoMessage) { info; }
-    error(error: ErrorMessage) { error; }
-    text(text: TextMessage) { text; }
+    stat(stat: StatMessage): void { stat; }
+    info(info: InfoMessage): void { info; }
+    error(error: ErrorMessage): void { error; }
+    text(text: TextMessage): void { text; }
 
-    feed(obj: Map<string, unknown>) {
+    take(buffers: Buffers): void { buffers; }
+
+    abstract finalize(): Promise<T>;
+
+    feed(obj: Map<string, unknown>): void {
         const code = obj.get("code");
         obj.delete("code");
         switch (code) {
         case "stat":
-            this.stat({ data: obj });
-            break;
+            return this.stat({ data: obj });
         case "info":
-            this.info(Object.fromEntries(obj) as unknown as InfoMessage);
-            break;
+            return this.info(Object.fromEntries(obj) as unknown as InfoMessage);
         case "error":
-            this.error(Object.fromEntries(obj) as unknown as ErrorMessage);
-            break;
+            return this.error(Object.fromEntries(obj) as unknown as ErrorMessage);
         case "text":
-            this.text(Object.fromEntries(obj) as unknown as TextMessage);
-            break;
+            return this.text(Object.fromEntries(obj) as unknown as TextMessage);
         default:
             throw new Error(`unrecognized code: ${code}`);
         }
     }
-
-    take(buffers: Buffers) { buffers; }
-
-    abstract finalize(): Promise<T>;
 
 }
