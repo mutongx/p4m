@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.0-unreleased] - 2023-12-06
+
+### Added
+
+- Use `less` as a pager for `p4 diff` command
+
 ## [0.3.1] - 2023-12-04
 
 ### Fixed
