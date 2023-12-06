@@ -67,9 +67,11 @@ export default abstract class Handler<T> {
         }
     }
 
-    print(s: string = "") {
+    print(s: string = "", newline: boolean = true) {
         this.stream.write(s);
-        this.stream.write("\n");
+        if (newline) {
+            this.stream.write("\n");
+        }
     }
 
 }
