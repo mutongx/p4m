@@ -1,8 +1,14 @@
+import { Writable } from "stream";
+
 import Buffers from "../buffers";
 
 export interface HandlerOption {
     root?: boolean;
     args?: string[];
+}
+
+export interface HandlerFlags {
+    pager?: boolean;
 }
 
 export interface StatMessage {
@@ -27,10 +33,13 @@ export interface TextMessage {
 export default abstract class Handler<T> {
 
     option: HandlerOption;
+    stream: Writable = process.stdout;
 
     constructor(option: HandlerOption = {}) {
         this.option = option;
     }
+
+    flags(): HandlerFlags { return {}; }
 
     stat(stat: StatMessage): void { stat; }
     info(info: InfoMessage): void { info; }
@@ -56,6 +65,11 @@ export default abstract class Handler<T> {
         default:
             throw new Error(`unrecognized code: ${code}`);
         }
+    }
+
+    print(s: string = "") {
+        this.stream.write(s);
+        this.stream.write("\n");
     }
 
 }
