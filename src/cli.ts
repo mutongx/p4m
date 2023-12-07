@@ -22,15 +22,7 @@ async function main() {
     }
     const command = args.shift()!;
     const handler = new handlerClass({ root: true, args: args });
-    const pager = handler.flags().pager ? spawn("less", ["-R"], { stdio: ["pipe", "inherit", "inherit"] }) : null;
-    if (pager) {
-        handler.stream = pager.stdin;
-    }
     const result = await run(command, args, handler);
-    if (pager) {
-        pager.stdin.end();
-        await new Promise((resolve) => { pager.on("exit", resolve); });
-    }
     return result;
 }
 
