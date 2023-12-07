@@ -48,3 +48,18 @@ export async function runEditor(args: string[]) {
     const proc = spawn("vim", [...vimArgs, ...args], { stdio: [tty.createReadStream(), tty.createWriteStream()] });
     await new Promise((resolve) => { proc.on("close", resolve); });
 }
+
+export async function runPager() {
+    const proc = spawn("less", ["-R"], { stdio: ["pipe", "inherit", "inherit" ]});
+    return {
+        write: (s: string = "") => new Promise((resolve) => {
+            proc.stdin.write(s, resolve);
+        }),
+        end: () => new Promise((resolve) => {
+            proc.stdin.end(resolve);
+        }),
+        wait: () => new Promise((resolve) => {
+            proc.on("exit", resolve);
+        })
+    };
+}
