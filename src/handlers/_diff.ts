@@ -1,4 +1,6 @@
 import { DiffColorMapping } from "../consts";
+import { logError, logInfo } from "../logger";
+import { runPager } from "../run";
 import Handler, { ErrorMessage, HandlerOption, InfoMessage, StatMessage, TextMessage } from "./base";
 import { parse, P4Object, DiffItemSpec } from "./p4object";
 
@@ -128,20 +130,26 @@ export default class DiffHandler extends Handler<Diff[]> {
 
     async finalize() {
         if (this.option.root) {
-            for (const d of this.diffs) {
-                this.print(`===== ${d.depotFile}#${d.rev} - ${d.clientFile} =====`);
-                this.print();
-                for (const line of this.iterateLine(d.data!)) {
-                    this.print(this.getColor(line)(line));
+            if (this.diffs.length > 0) {
+                const pager = await runPager();
+                for (const d of this.diffs) {
+                    pager.write(`===== ${d.depotFile}#${d.rev} - ${d.clientFile} =====\n`);
+                    pager.write("\n");
+                    for (const line of this.iterateLine(d.data!)) {
+                        pager.write(this.getColor(line)(line));
+                        pager.write("\n");
+                    }
+                    pager.write("\n");
                 }
-                this.print();
+                pager.end();
+                await pager.wait();
             }
+            // normal messages and errors does not use pager
             for (const message of this.messages) {
-                this.print(message.data.trim());
+                logInfo(message.data.trim());
             }
-            // TODO: Correctly handle errors
             for (const error of this.errors) {
-                this.print(error.data.trim());
+                logError(error.data.trim());
             }
         }
         return this.diffs;

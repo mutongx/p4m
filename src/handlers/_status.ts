@@ -4,6 +4,7 @@ import ChangeHandler, { ChangeConfig } from "./_change";
 
 import { run } from "../run";
 import { ActionTextsMapping } from "../consts";
+import { logError, logInfo } from "../logger";
 
 interface FileStatus extends P4Object<typeof FileStatusSpec> {
     messages: string[];
@@ -68,27 +69,27 @@ export default class StatusHandler extends Handler<Record<string, Change>> {
         if (this.option.root) {
             for (const [name, change] of Object.entries(this.changes)) {
                 if (name == "") {
-                    this.print("Untracked files:");
-                    this.print("  (use p4 add/edit/delete/reconcile to track them)");
+                    logInfo("Untracked files:");
+                    logInfo("  (use p4 add/edit/delete/reconcile to track them)");
                 } else if (name == "default") {
-                    this.print("Changelist default:");
-                    this.print("  (use p4 shelve to create a new changelist and push them to server)");
-                    this.print("  (use p4 reopen to move them to a numbered changelist)");
+                    logInfo("Changelist default:");
+                    logInfo("  (use p4 shelve to create a new changelist and push them to server)");
+                    logInfo("  (use p4 reopen to move them to a numbered changelist)");
                 } else if (change) {
-                    this.print(`Changelist #${change.name}: ${change.description}`);
-                    this.print("  (use p4 shelve to push them to server)");
+                    logInfo(`Changelist #${change.name}: ${change.description}`);
+                    logInfo("  (use p4 shelve to push them to server)");
                 }
                 for (const file of change.files) {
                     const color = ActionTextsMapping.color[file.action];
-                    this.print(color(`\t[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
+                    logInfo(color(`\t[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
                 }
-                this.print();
+                logInfo();
             }
             for (const message of this.messages) {
-                this.print(message.data.trim());
+                logInfo(message.data.trim());
             }
             for (const error of this.errors) {
-                this.print(error.data.trim());
+                logError(error.data.trim());
             }
         }
         return this.changes;

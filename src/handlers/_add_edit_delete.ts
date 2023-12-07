@@ -2,6 +2,7 @@ import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import { parse, P4Object, FileActionSpec } from "./p4object";
 
 import { ActionTextsMapping } from "../consts";
+import { logError, logInfo } from "../logger";
 
 export interface FileAction extends P4Object<typeof FileActionSpec> {
     messages: string[];
@@ -39,16 +40,16 @@ export default class AddEditDeleteHandler extends Handler<FileAction[]> {
         if (this.option.root) {
             for (const action of this.actions) {
                 const color = ActionTextsMapping.color[action.action];
-                this.print(color(`[${ActionTextsMapping.short[action.action]}] ${action.depotFile}`));
+                logInfo(color(`[${ActionTextsMapping.short[action.action]}] ${action.depotFile}`));
                 for (const message of action.messages) {
-                    this.print(`  - ${message}`);
+                    logInfo(`  - ${message}`);
                 }
             }
             for (const message of this.messages) {
-                this.print(message.data.trim());
+                logInfo(message.data.trim());
             }
             for (const error of this.errors) {
-                this.print(error.data.trim());
+                logError(error.data.trim());
             }
         }
         return this.actions;

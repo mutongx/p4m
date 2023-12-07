@@ -2,6 +2,7 @@ import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import { parse, P4Object, ShelvedFileSpec } from "./p4object";
 
 import { ActionTextsMapping } from "../consts";
+import { logError, logInfo } from "../logger";
 
 // TODO: Fix duplicated code with AddEditDeleteHandler
 
@@ -41,16 +42,16 @@ export default class UnshelveHandler extends Handler<UnshelvedFile[]> {
         if (this.option.root) {
             for (const file of this.files) {
                 const color = ActionTextsMapping.color[file.action];
-                this.print(color(`[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
+                logInfo(color(`[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
                 for (const message of file.messages) {
-                    this.print(`  - ${message}`);
+                    logInfo(`  - ${message}`);
                 }
             }
             for (const message of this.messages) {
-                this.print(message.data.trim());
+                logInfo(message.data.trim());
             }
             for (const error of this.errors) {
-                this.print(error.data.trim());
+                logError(error.data.trim());
             }
         }
         return this.files;

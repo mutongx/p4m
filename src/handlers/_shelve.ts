@@ -6,6 +6,7 @@ import ChangeHandler, { ChangeConfig } from "./_change";
 import Buffers from "../buffers";
 import { run } from "../run";
 import { Texts, ActionTextsMapping } from "../consts";
+import { logError, logInfo } from "../logger";
 
 // TODO: Fix duplicated code with ChangeHandler
 
@@ -52,20 +53,18 @@ export default class ShelveHandler extends Handler<Shelve | null> {
     }
 
     take(buffers: Buffers) {
-        const error = this.errors[this.errors.length - 1];
-        if (this.option.root && error) {
-            if (error.data.startsWith(Texts.errorInChange)) {
-                // Print out the error data and pop it out
-                this.print(error.data.trim());
-                this.errors.pop();
-                // Consume the continuation prompt, don't give it to MarshalParser
-                const continueBuffer = buffers.consume(Texts.hitReturnToContinue.length);
-                if (!continueBuffer || continueBuffer.toString() !== Texts.hitReturnToContinue) {
-                    throw new Error("failed to parse continue text");
-                }
-                // Print it out to user
-                this.print(Texts.hitReturnToContinue, false);
+        const lastErrorMessage = this.errors.length > 0 ? this.errors[this.errors.length - 1].data : null;
+        if (this.option.root && lastErrorMessage?.startsWith(Texts.errorInChange)) {
+            this.errors.pop();
+            // Print out the error data and pop it out
+            logInfo(lastErrorMessage, false);
+            // Consume the continuation prompt, don't give it to MarshalParser
+            const continueBuffer = buffers.consume(Texts.hitReturnToContinue.length);
+            if (!continueBuffer || continueBuffer.toString() !== Texts.hitReturnToContinue) {
+                throw new Error("failed to parse continue text");
             }
+            // Print it out to user
+            logInfo(Texts.hitReturnToContinue, false);
         }
     }
 
@@ -75,17 +74,17 @@ export default class ShelveHandler extends Handler<Shelve | null> {
         }
         if (this.option.root) {
             if (this.shelve) {
-                this.print(`Shelved changelist #${this.shelve.name}: ${this.shelve.description}`);
+                logInfo(`Shelved changelist #${this.shelve.name}: ${this.shelve.description}`);
                 for (const file of this.shelve.files) {
                     const color = ActionTextsMapping.color[file.action];
-                    this.print(color(`\t[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
+                    logInfo(color(`\t[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
                 }
             }
             for (const message of this.messages) {
-                this.print(message.data.trim());
+                logInfo(message.data.trim());
             }
             for (const error of this.errors) {
-                this.print(error.data.trim());
+                logError(error.data.trim());
             }
         }
         return this.shelve;
