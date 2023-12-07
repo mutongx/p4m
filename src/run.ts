@@ -50,7 +50,8 @@ export async function runEditor(args: string[]) {
 }
 
 export async function runPager() {
-    const proc = spawn("less", ["-R"], { stdio: ["pipe", "inherit", "inherit" ]});
+    const proc = spawn("less", ["-R"], { stdio: ["pipe", "inherit", "inherit"] });
+    proc.stdin.on("error", () => { });
     return {
         write: (s: string = "") => new Promise((resolve) => {
             proc.stdin.write(s, resolve);
@@ -59,7 +60,7 @@ export async function runPager() {
             proc.stdin.end(resolve);
         }),
         wait: () => new Promise((resolve) => {
-            proc.on("exit", resolve);
-        })
+            proc.on("close", resolve);
+        }),
     };
 }
