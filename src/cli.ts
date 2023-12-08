@@ -1,4 +1,3 @@
-import { spawn } from "child_process";
 import { run, runPassthrough, runEditor } from "./run";
 import handlerMapping from "./handlers";
 
