@@ -1,10 +1,16 @@
 # Changelog
 
-## [0.4.0-unreleased] - 2023-12-06
+## [0.4.0] - 2023-12-06
 
 ### Added
 
 - Use `less` as a pager for `p4 diff` command
+- Use custom and simple logger instead of console.log and console.error
+- Add `npm run check` to automatically run `tsc` and `eslint`, and add them to CI
+
+### Changed
+
+- Some code style fixes
 
 ## [0.3.1] - 2023-12-04
 
