@@ -6,6 +6,7 @@
   "bin": "dist/cli.js",
   "scripts": {
     "cli": "node ./dist/cli.js",
+    "check": "tsc --noEmit && eslint src/",
     "build": "node ./build.mjs",
     "test": "jest"
   },
