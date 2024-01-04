@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.1] - 2024-01-04
+
+### Added
+
+- Support `branch` action (we should really add a default handler in the future)
+
 ## [0.4.0] - 2023-12-06
 
 ### Added
