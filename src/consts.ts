@@ -13,6 +13,7 @@ export const ActionTextsMapping = {
         "delete": "D",
         "move/add": "MA",
         "move/delete": "MD",
+        "branch": "B",
     } as Record<string, string>,
     short: {
         "add": " add",
@@ -20,6 +21,7 @@ export const ActionTextsMapping = {
         "delete": " del",
         "move/add": "madd",
         "move/delete": "mdel",
+        "branch": "brch",
     } as Record<string, string>,
     emoji: {
         "add": "✨",
@@ -27,6 +29,7 @@ export const ActionTextsMapping = {
         "delete": "🗑️",
         "move/add": "📑",
         "move/delete": "✂️",
+        "branch": "🌵",
     } as Record<string, string>,
     color: {
         "add": chalk.green,
@@ -34,6 +37,7 @@ export const ActionTextsMapping = {
         "delete": chalk.red,
         "move/add": chalk.green,
         "move/delete": chalk.red,
+        "branch": chalk.cyan,
     } as Record<string, ChalkInstance>,
 };
 
