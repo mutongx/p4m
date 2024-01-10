@@ -11,6 +11,7 @@ function generate(objects: string[], version: number = 0) {
     for (const o of objects) {
         lines.push(`marshal.dump(${o}, sys.stdout.buffer, ${version})`);
     }
+    // TODO: Switch to Bun's spawn
     return child.spawn("python3", ["-c", lines.join("\n")], { stdio: ["pipe", "pipe", 2] });
 }
 
