@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.0] - 2024-01-10
+
+### Changed
+
+- Change JavaScript runtime to Bun and all related code changes
+
 ## [0.4.1] - 2024-01-04
 
 ### Added
