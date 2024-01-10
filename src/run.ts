@@ -23,7 +23,7 @@ export async function run<T>(command: string, args: string[], handler: Handler<T
     });
     const parser = new MarshalParser();
     parser.begin();
-    for await (const chunk of proc.stdout!) {
+    for await (const chunk of proc.stdout) {
         parser.push(Buffer.from(chunk));
         for (const item of parser.iter()) {
             handler.feed(item as Map<string, unknown>);
