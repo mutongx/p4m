@@ -1,5 +1,5 @@
-import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
-import { parse, P4Object, ChangeConfigSpec } from "./p4object";
+import Handler, { type ErrorMessage, type InfoMessage, type StatMessage } from "./base";
+import { type P4Object, parse, ChangeConfigSpec } from "./p4object";
 
 import Buffers from "../buffers";
 import { Texts } from "../consts";

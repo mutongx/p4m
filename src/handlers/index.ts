@@ -1,4 +1,4 @@
-import Handler, { HandlerOption } from "./base";
+import Handler, { type HandlerOption } from "./base";
 import AddEditDeleteHandler from "./_add_edit_delete";
 import StatusHandler from "./_status";
 import ChangeHandler from "./_change";

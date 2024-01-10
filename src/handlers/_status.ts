@@ -1,6 +1,6 @@
-import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
-import { parse, P4Object, FileStatusSpec } from "./p4object";
-import ChangeHandler, { ChangeConfig } from "./_change";
+import Handler, { type ErrorMessage, type InfoMessage, type StatMessage } from "./base";
+import { parse, type P4Object, FileStatusSpec } from "./p4object";
+import ChangeHandler, { type ChangeConfig } from "./_change";
 
 import { run } from "../run";
 import { ActionTextsMapping } from "../consts";

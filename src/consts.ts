@@ -1,4 +1,4 @@
-import chalk, { ChalkInstance } from "chalk";
+import chalk, { type ChalkInstance } from "chalk";
 
 export const Texts = {
     errorInChange: "Error in change specification.",
