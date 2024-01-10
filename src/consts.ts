@@ -14,7 +14,7 @@ export const Texts = {
     descriptionPlaceholder: "<enter description here>",
 };
 
-export const ActionTextsMapping = {
+export const ActionsMapping = {
     char: DefaultProxy({
         "add": "A",
         "edit": "E",

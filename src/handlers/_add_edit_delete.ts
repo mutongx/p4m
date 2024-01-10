@@ -1,7 +1,7 @@
 import Handler from "./base";
 import { parse, FileActionSpec } from "./p4object";
 
-import { ActionTextsMapping } from "../consts";
+import { ActionsMapping } from "../consts";
 import { logError, logInfo } from "../logger";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
@@ -42,8 +42,8 @@ export default class AddEditDeleteHandler extends Handler<FileAction[]> {
     async finalize() {
         if (this.option.root) {
             for (const action of this.actions) {
-                const color = ActionTextsMapping.color[action.action];
-                logInfo(color(`[${ActionTextsMapping.short[action.action]}] ${action.depotFile}`));
+                const color = ActionsMapping.color[action.action];
+                logInfo(color(`[${ActionsMapping.short[action.action]}] ${action.depotFile}`));
                 for (const message of action.messages) {
                     logInfo(`  - ${message}`);
                 }

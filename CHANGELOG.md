@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.5.1] - 2024-01-10
+
+### Fixed
+
+- Support default value for ActionsMapping to avoid unknown action raising exceptions
+
 ## [0.5.0] - 2024-01-10
 
 ### Changed

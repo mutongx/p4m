@@ -3,7 +3,7 @@ import { parse, FileStatusSpec } from "./p4object";
 import ChangeHandler, { type ChangeConfig } from "./_change";
 
 import { run } from "../run";
-import { ActionTextsMapping } from "../consts";
+import { ActionsMapping } from "../consts";
 import { logError, logInfo } from "../logger";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
@@ -83,8 +83,8 @@ export default class StatusHandler extends Handler<Record<string, Change>> {
                     logInfo("  (use p4 shelve to push them to server)");
                 }
                 for (const file of change.files) {
-                    const color = ActionTextsMapping.color[file.action];
-                    logInfo(color(`\t[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
+                    const color = ActionsMapping.color[file.action];
+                    logInfo(color(`\t[${ActionsMapping.short[file.action]}] ${file.depotFile}`));
                 }
                 logInfo();
             }

@@ -5,7 +5,7 @@ import ChangeHandler, { type ChangeConfig } from "./_change";
 
 import Buffers from "../buffers";
 import { run } from "../run";
-import { Texts, ActionTextsMapping } from "../consts";
+import { Texts, ActionsMapping } from "../consts";
 import { logError, logInfo } from "../logger";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
@@ -79,8 +79,8 @@ export default class ShelveHandler extends Handler<Shelve | null> {
             if (this.shelve) {
                 logInfo(`Shelved changelist #${this.shelve.name}: ${this.shelve.description}`);
                 for (const file of this.shelve.files) {
-                    const color = ActionTextsMapping.color[file.action];
-                    logInfo(color(`\t[${ActionTextsMapping.short[file.action]}] ${file.depotFile}`));
+                    const color = ActionsMapping.color[file.action];
+                    logInfo(color(`\t[${ActionsMapping.short[file.action]}] ${file.depotFile}`));
                 }
             }
             for (const message of this.messages) {
