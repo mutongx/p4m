@@ -1,7 +1,7 @@
-import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
-import { parse, P4Object, ShelvedFileSpec } from "./p4object";
+import Handler, { type ErrorMessage, type InfoMessage, type StatMessage } from "./base";
+import { type P4Object, parse, ShelvedFileSpec } from "./p4object";
 
-import ChangeHandler, { ChangeConfig } from "./_change";
+import ChangeHandler, { type ChangeConfig } from "./_change";
 
 import Buffers from "../buffers";
 import { run } from "../run";

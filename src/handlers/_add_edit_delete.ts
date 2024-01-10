@@ -1,5 +1,5 @@
-import Handler, { ErrorMessage, InfoMessage, StatMessage } from "./base";
-import { parse, P4Object, FileActionSpec } from "./p4object";
+import Handler, { type ErrorMessage, type InfoMessage, type StatMessage } from "./base";
+import { type P4Object, parse, FileActionSpec } from "./p4object";
 
 import { ActionTextsMapping } from "../consts";
 import { logError, logInfo } from "../logger";
