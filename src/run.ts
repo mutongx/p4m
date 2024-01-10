@@ -8,6 +8,7 @@ export async function run<T>(command: string, args: string[], handler: Handler<T
         function quote(s: string) {
             return `'${s.replaceAll("'", "'\"'\"'")}'`;
         }
+        // If file is put under /$bunfs/, we assume that it is a compiled binary
         if (Bun.main.startsWith("/$bunfs/")) {
             return quote(process.execPath);
         }
