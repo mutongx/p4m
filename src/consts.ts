@@ -1,4 +1,12 @@
-import chalk, { type ChalkInstance } from "chalk";
+import chalk from "chalk";
+
+function DefaultProxy<T>(target: Record<string, T>, fn: (prop: string) => T) {
+    return new Proxy(target, {
+        get: (target, p: string) => {
+            return target[p] === undefined ? fn(p) : target[p];
+        }
+    });
+}
 
 export const Texts = {
     errorInChange: "Error in change specification.",
@@ -7,38 +15,38 @@ export const Texts = {
 };
 
 export const ActionTextsMapping = {
-    char: {
+    char: DefaultProxy({
         "add": "A",
         "edit": "E",
         "delete": "D",
         "move/add": "MA",
         "move/delete": "MD",
         "branch": "B",
-    } as Record<string, string>,
-    short: {
+    }, (a) => `UNK<${a}>`),
+    short: DefaultProxy({
         "add": " add",
         "edit": "edit",
         "delete": " del",
         "move/add": "madd",
         "move/delete": "mdel",
         "branch": "brch",
-    } as Record<string, string>,
-    emoji: {
+    }, (a) => `unknown<${a}>`),
+    emoji: DefaultProxy({
         "add": "✨",
         "edit": "✏️",
         "delete": "🗑️",
         "move/add": "📑",
         "move/delete": "✂️",
         "branch": "🌵",
-    } as Record<string, string>,
-    color: {
+    }, (a) => `❓<${a}>` ),
+    color: DefaultProxy({
         "add": chalk.green,
         "edit": chalk.yellow,
         "delete": chalk.red,
         "move/add": chalk.green,
         "move/delete": chalk.red,
         "branch": chalk.cyan,
-    } as Record<string, ChalkInstance>,
+    }, () => chalk.white),
 };
 
 export const DiffColorMapping = {
