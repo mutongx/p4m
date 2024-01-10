@@ -52,12 +52,12 @@ describe("ObjectSpect parse", () => {
         } as const;
         const data = new Map<string, unknown>([
             ["plainField", "abcd"],
-            ["nestedField", "efgh"],
+            ["nestedField", 10086],
         ]);
         expect(parse(NestedObjectSpec, data)).toEqual({
             "plainField": "abcd",
             "nestedObject": {
-                "nestedField": "efgh",
+                "nestedField": 10086,
             }
         });
     });
