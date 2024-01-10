@@ -1,4 +1,3 @@
-import { Readable } from "stream";
 import Buffers from "./buffers";
 
 enum DataType {
@@ -281,17 +280,6 @@ export class MarshalParser {
         if (this.ptrs[0].dirty) {
             throw new Error("incomplete stream");
         }
-    }
-
-    async * consume(stream: Readable) {
-        this.begin();
-        for await (const chunk of stream) {
-            this.push(chunk);
-            for (const item of this.iter()) {
-                yield item;
-            }
-        }
-        this.end();
     }
 
 }

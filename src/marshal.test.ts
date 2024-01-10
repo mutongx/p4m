@@ -1,7 +1,7 @@
 import { expect, test, describe } from "bun:test";
-
 import { MarshalParser } from "./marshal";
-import child, { ChildProcess } from "child_process";
+
+import type { Subprocess } from "bun";
 
 function generate(objects: string[], version: number = 0) {
     const lines: string[] = [
@@ -11,16 +11,24 @@ function generate(objects: string[], version: number = 0) {
     for (const o of objects) {
         lines.push(`marshal.dump(${o}, sys.stdout.buffer, ${version})`);
     }
-    // TODO: Switch to Bun's spawn
-    return child.spawn("python3", ["-c", lines.join("\n")], { stdio: ["pipe", "pipe", 2] });
+    return Bun.spawn({
+        cmd: ["python3", "-c", lines.join("\n")],
+        stdio: ["pipe", "pipe", "inherit"],
+    });
 }
 
-async function parse(proc: ChildProcess) {
+async function parse(proc: Subprocess<"pipe", "pipe", "inherit">) {
     const parser = new MarshalParser();
     const items: unknown[] = [];
-    for await (const item of parser.consume(proc.stdout!)) {
-        items.push(item);
+    parser.begin();
+    for await (const chunk of proc.stdout) {
+        parser.push(Buffer.from(chunk));
+        for (const item of parser.iter()) {
+            items.push(item);
+        }
     }
+    parser.end();
+    await proc.exited;
     return items;
 }
 
