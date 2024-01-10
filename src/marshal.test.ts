@@ -1,3 +1,5 @@
+import { expect, test, describe } from "bun:test";
+
 import { MarshalParser } from "./marshal";
 import child, { ChildProcess } from "child_process";
 
