@@ -1,8 +1,11 @@
-import Handler, { type ErrorMessage, type InfoMessage, type StatMessage } from "./base";
-import { type P4Object, parse, FileActionSpec } from "./p4object";
+import Handler from "./base";
+import { parse, FileActionSpec } from "./p4object";
 
 import { ActionTextsMapping } from "../consts";
 import { logError, logInfo } from "../logger";
+
+import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
+import type { P4Object } from "./p4object";
 
 export interface FileAction extends P4Object<typeof FileActionSpec> {
     messages: string[];

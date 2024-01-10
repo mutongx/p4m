@@ -1,10 +1,13 @@
-import Handler, { type ErrorMessage, type InfoMessage, type StatMessage } from "./base";
-import { parse, type P4Object, FileStatusSpec } from "./p4object";
+import Handler from "./base";
+import { parse, FileStatusSpec } from "./p4object";
 import ChangeHandler, { type ChangeConfig } from "./_change";
 
 import { run } from "../run";
 import { ActionTextsMapping } from "../consts";
 import { logError, logInfo } from "../logger";
+
+import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
+import type { P4Object } from "./p4object";
 
 interface FileStatus extends P4Object<typeof FileStatusSpec> {
     messages: string[];

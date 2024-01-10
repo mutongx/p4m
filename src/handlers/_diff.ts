@@ -1,8 +1,11 @@
 import { DiffColorMapping } from "../consts";
 import { logError, logInfo } from "../logger";
 import { runPager } from "../run";
-import Handler, { type ErrorMessage, type InfoMessage, type StatMessage, type TextMessage, type HandlerOption } from "./base";
-import { type P4Object, parse, DiffItemSpec } from "./p4object";
+import Handler from "./base";
+import { parse, DiffItemSpec } from "./p4object";
+
+import type { ErrorMessage, InfoMessage, StatMessage, TextMessage, HandlerOption } from "./base";
+import type { P4Object } from "./p4object";
 
 export interface Diff extends P4Object<typeof DiffItemSpec> {
     data: string | null,

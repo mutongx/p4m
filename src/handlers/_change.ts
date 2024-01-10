@@ -1,9 +1,12 @@
-import Handler, { type ErrorMessage, type InfoMessage, type StatMessage } from "./base";
-import { type P4Object, parse, ChangeConfigSpec } from "./p4object";
+import Handler from "./base";
+import { parse, ChangeConfigSpec } from "./p4object";
 
 import Buffers from "../buffers";
 import { Texts } from "../consts";
 import { logError, logInfo } from "../logger";
+
+import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
+import type { P4Object } from "./p4object";
 
 export type ChangeConfig = P4Object<typeof ChangeConfigSpec>;
 

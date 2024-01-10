@@ -1,8 +1,11 @@
-import Handler, { type ErrorMessage, type InfoMessage, type StatMessage } from "./base";
-import { type P4Object, parse, ShelvedFileSpec } from "./p4object";
+import Handler from "./base";
+import { parse, ShelvedFileSpec } from "./p4object";
 
 import { ActionTextsMapping } from "../consts";
 import { logError, logInfo } from "../logger";
+
+import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
+import type { P4Object } from "./p4object";
 
 // TODO: Fix duplicated code with AddEditDeleteHandler
 
