@@ -21,8 +21,6 @@ async function parse(proc: ChildProcess) {
     return items;
 }
 
-jest.setTimeout(60 * 60 * 1000);
-
 describe("literal", () => {
 
     test("none", async () => {
