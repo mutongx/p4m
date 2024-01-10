@@ -1,3 +1,5 @@
+import { expect, test, describe } from "bun:test";
+
 import { parse } from "./p4object";
 
 describe("ObjectSpect parse", () => {
