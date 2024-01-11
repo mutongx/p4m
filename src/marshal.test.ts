@@ -1,4 +1,4 @@
-import child, { ChildProcess } from "node:child_process";
+import child, { type ChildProcess } from "node:child_process";
 import { MarshalParser } from "./marshal";
 
 function generate(objects: string[], version: number = 0) {
@@ -10,7 +10,7 @@ function generate(objects: string[], version: number = 0) {
         lines.push(`marshal.dump(${o}, sys.stdout.buffer, ${version})`);
     }
     // We still use Node.js API here 
-    return child.spawn("python3", ["-c", lines.join("\n")], { stdio: ["pipe", "pipe", 2] });
+    return child.spawn("python3", ["-c", lines.join("\n")], { stdio: ["pipe", "pipe", "inherit"] });
 }
 
 async function parse(proc: ChildProcess) {
