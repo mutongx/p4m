@@ -1,7 +1,5 @@
-import { expect, test, describe } from "bun:test";
+import child, { ChildProcess } from "node:child_process";
 import { MarshalParser } from "./marshal";
-
-import type { Subprocess } from "bun";
 
 function generate(objects: string[], version: number = 0) {
     const lines: string[] = [
@@ -11,24 +9,22 @@ function generate(objects: string[], version: number = 0) {
     for (const o of objects) {
         lines.push(`marshal.dump(${o}, sys.stdout.buffer, ${version})`);
     }
-    return Bun.spawn({
-        cmd: ["python3", "-c", lines.join("\n")],
-        stdio: ["pipe", "pipe", "inherit"],
-    });
+    // We still use Node.js API here 
+    return child.spawn("python3", ["-c", lines.join("\n")], { stdio: ["pipe", "pipe", 2] });
 }
 
-async function parse(proc: Subprocess<"pipe", "pipe", "inherit">) {
+async function parse(proc: ChildProcess) {
     const parser = new MarshalParser();
     const items: unknown[] = [];
     parser.begin();
-    for await (const chunk of proc.stdout) {
+    for await (const chunk of proc.stdout!) {
         parser.push(Buffer.from(chunk));
         for (const item of parser.iter()) {
             items.push(item);
         }
     }
     parser.end();
-    await proc.exited;
+    await new Promise((resolve) => proc.on("close", resolve));
     return items;
 }
 
