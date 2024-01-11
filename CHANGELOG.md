@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Add Node.js back to run unit tests to ensure node compatibility
+
 ## [0.5.1] - 2024-01-10
 
 ### Fixed
