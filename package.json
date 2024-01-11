@@ -2,7 +2,7 @@
   "name": "p4m",
   "license": "GPL-3.0-or-later",
   "description": "A toy to mess around Perforce's Helix Command-Line Client (P4).",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "scripts": {
     "check": "tsc --noEmit && eslint src/",
     "run-cli": "bun run ./src/cli.ts",
