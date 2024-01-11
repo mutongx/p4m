@@ -77,7 +77,7 @@ export function parse<T extends ObjectSpec>(spec: T, message: Map<string, unknow
             let inArrayNext = inArray;
             if (storage == "array") {
                 // TODO: Move this check to type definition
-                if (inArrayNext) {
+                if (inArray) {
                     throw new Error("nested array is not supported");
                 }
                 assign(prefix, key, []);

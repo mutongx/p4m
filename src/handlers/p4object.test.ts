@@ -1,7 +1,7 @@
 import { parse } from "./p4object";
 
 describe("ObjectSpect parse", () => {
-    test("parse literal field", () => {
+    test("parse simple object", () => {
         const SimpleObjectSpec = {
             "stringField": ["required", "string"],
             "numberField": ["optional", "number"],
@@ -18,7 +18,7 @@ describe("ObjectSpect parse", () => {
     });
 
     test("parse array field", () => {
-        const ArrayObjectSpec = {
+        const ArrayFieldSpec = {
             "stringArray": ["array", "string"],
             "numberArray": ["array", "number"],
         } as const;
@@ -35,7 +35,7 @@ describe("ObjectSpect parse", () => {
             ["stringArray9", "klmn"],
             ["stringArray10", "opqr"],
         ]);
-        expect(parse(ArrayObjectSpec, data)).toEqual({
+        expect(parse(ArrayFieldSpec, data)).toEqual({
             "stringArray": ["abcd", "efgh", "ijkl", "mnop", "qrst", "uvwx", "yzab", "cdef", "ghij", "klmn", "opqr"],
             "numberArray": [],
         });
@@ -60,26 +60,26 @@ describe("ObjectSpect parse", () => {
         });
     });
 
-    test("parse nested object array", () => {
-        const NestedObjectSpec = {
+    test("parse object array", () => {
+        const ObjectArraySpec = {
             "plainField": ["required", "number"],
-            "nestedObjectArray": ["array", {
-                "nestedField": ["required", "string"],
-                "anotherNestedField": ["required", "number"],
+            "objectArray": ["array", {
+                "objectArrayStringField": ["required", "string"],
+                "objectArrayNumberField": ["required", "number"],
             }],
         } as const;
         const data = new Map<string, unknown>([
             ["plainField", 1000],
-            ["nestedField0", "efgh"],
-            ["anotherNestedField0", 1111],
-            ["nestedField1", "ijkl"],
-            ["anotherNestedField1", 2222],
+            ["objectArrayStringField0", "efgh"],
+            ["objectArrayNumberField0", 1111],
+            ["objectArrayStringField1", "ijkl"],
+            ["objectArrayNumberField1", 2222],
         ]);
-        expect(parse(NestedObjectSpec, data)).toEqual({
+        expect(parse(ObjectArraySpec, data)).toEqual({
             "plainField": 1000,
-            "nestedObjectArray": [
-                { "nestedField": "efgh", "anotherNestedField": 1111 },
-                { "nestedField": "ijkl", "anotherNestedField": 2222 },
+            "objectArray": [
+                { "objectArrayStringField": "efgh", "objectArrayNumberField": 1111 },
+                { "objectArrayStringField": "ijkl", "objectArrayNumberField": 2222 },
             ]
         });
     });
