@@ -1,4 +1,3 @@
-import { open as nodeOpen } from "node:fs/promises";
 import { Texts } from "./consts";
 import { MarshalParser } from "./marshal";
 import Handler from "./handlers/base";
@@ -75,8 +74,7 @@ export async function runEditor(args: string[]) {
     }
     args.shift();
     const vimArgs = await generateVimArgs(args);
-    // FIXME: Currently Bun returns a file descriptor for open(), and we relies on this behavior
-    const tty = await nodeOpen("/dev/tty", "w+") as unknown as number;
+    const tty = Bun.file("/dev/tty");
     const proc = Bun.spawn({
         cmd: ["vim", ...vimArgs, ...args],
         stdio: [tty, tty, "inherit"],
