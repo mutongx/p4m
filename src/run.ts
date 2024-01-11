@@ -49,19 +49,26 @@ export async function runEditor(args: string[]) {
         if (args.length != 1) {
             return [];
         }
-        let enterLine: number = 0;
-        let enterFound: boolean = false;
         const file = await Bun.file(args[0]);
-        // TODO: Read files line-by-line instead of using text() and split()
-        for await (const line of (await file.text()).split("\n")) {
-            enterLine += 1;
-            if (line === `\t${Texts.descriptionPlaceholder}`) {
+        const text = await file.text();
+        const search = `\t${Texts.descriptionPlaceholder}`;
+        let currentPos: number = 0;
+        let currentLine: number = 0;
+        let enterFound: boolean = false;
+        while (currentPos < text.length) {
+            let nextLinePos = text.indexOf("\n", currentPos);
+            if (nextLinePos == -1) {
+                nextLinePos = text.length;
+            }
+            if (text.substring(currentPos, nextLinePos) === search) {
                 enterFound = true;
                 break;
             }
+            currentPos = nextLinePos + 1;
+            currentLine += 1;
         }
         if (enterFound) {
-            return [`+${enterLine}`, "-c", `s/${Texts.descriptionPlaceholder}//`, "-c", "startinsert"];
+            return [`+${currentLine + 1}`, "-c", `s/${Texts.descriptionPlaceholder}//`, "-c", "startinsert"];
         } else {
             return [];
         }
