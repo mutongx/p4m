@@ -2,8 +2,7 @@ import Handler from "./base";
 import { DiffColorMapping } from "./consts";
 import { parse, DiffItemSpec } from "./p4object";
 
-import { logError, logInfo } from "../logger";
-import { runPager } from "../run";
+import type Context from "../common/context";
 
 import type { ErrorMessage, InfoMessage, StatMessage, TextMessage, HandlerOption } from "./base";
 import type { P4Object } from "./p4object";
@@ -27,8 +26,8 @@ export default class DiffHandler extends Handler<Diff[]> {
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
 
-    constructor(option: HandlerOption = {}) {
-        super(option);
+    constructor(ctx: Context, option: HandlerOption = {}) {
+        super(ctx, option);
 
         for (const arg of this.option.args || []) {
             if (arg.startsWith("-d")) {
@@ -135,7 +134,7 @@ export default class DiffHandler extends Handler<Diff[]> {
     async finalize() {
         if (this.option.root) {
             if (this.diffs.length > 0) {
-                const pager = await runPager();
+                const pager = await this.ctx.newPager();
                 for (const d of this.diffs) {
                     pager.write(`===== ${d.depotFile}#${d.rev} - ${d.clientFile} =====\n`);
                     pager.write("\n");
@@ -150,10 +149,10 @@ export default class DiffHandler extends Handler<Diff[]> {
             }
             // normal messages and errors does not use pager
             for (const message of this.messages) {
-                logInfo(message.data.trim());
+                this.ctx.printText(message.data.trim());
             }
             for (const error of this.errors) {
-                logError(error.data.trim());
+                this.ctx.printError(error.data.trim());
             }
         }
         return this.diffs;

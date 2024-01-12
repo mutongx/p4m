@@ -6,7 +6,9 @@ import ShelveHandler from "./_shelve";
 import UnshelveHandler from "./_unshelve";
 import DiffHandler from "./_diff";
 
-const mapping: Record<string, { new(option?: HandlerOption): Handler<unknown> }> = {
+import type Context from "../common/context";
+
+const HandlerMapping: Record<string, { new(context: Context, option?: HandlerOption): Handler<unknown> }> = {
     add: AddEditDeleteHandler,
     edit: AddEditDeleteHandler,
     delete: AddEditDeleteHandler,
@@ -18,4 +20,4 @@ const mapping: Record<string, { new(option?: HandlerOption): Handler<unknown> }>
     diff: DiffHandler,
 };
 
-export default mapping;
+export default HandlerMapping;

@@ -3,10 +3,6 @@ import { ActionsMapping } from "./consts";
 import { parse, FileStatusSpec } from "./p4object";
 import ChangeHandler from "./_change";
 
-import { run } from "../run";
-
-import { logError, logInfo } from "../logger";
-
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import type { P4Object } from "./p4object";
 import type { ChangeConfig } from "./_change";
@@ -36,8 +32,8 @@ export default class StatusHandler extends Handler<Record<string, Change>> {
         if (this.changes[change] === undefined) {
             this.changes[change] = { name: change, files: [] };
             if (change != "default" && change != "") {
-                const handler = new ChangeHandler();
-                this.descriptionPromises.push(run("change", ["-o", change], handler));
+                const handler = new ChangeHandler(this.ctx);
+                this.descriptionPromises.push(this.ctx.runP4("change", ["-o", change], handler));
             }
         }
         this.changes[change].files.push(file);
@@ -74,27 +70,27 @@ export default class StatusHandler extends Handler<Record<string, Change>> {
         if (this.option.root) {
             for (const [name, change] of Object.entries(this.changes)) {
                 if (name == "") {
-                    logInfo("Untracked files:");
-                    logInfo("  (use p4 add/edit/delete/reconcile to track them)");
+                    this.ctx.printText("Untracked files:");
+                    this.ctx.printText("  (use p4 add/edit/delete/reconcile to track them)");
                 } else if (name == "default") {
-                    logInfo("Changelist default:");
-                    logInfo("  (use p4 shelve to create a new changelist and push them to server)");
-                    logInfo("  (use p4 reopen to move them to a numbered changelist)");
+                    this.ctx.printText("Changelist default:");
+                    this.ctx.printText("  (use p4 shelve to create a new changelist and push them to server)");
+                    this.ctx.printText("  (use p4 reopen to move them to a numbered changelist)");
                 } else if (change) {
-                    logInfo(`Changelist #${change.name}: ${change.description}`);
-                    logInfo("  (use p4 shelve to push them to server)");
+                    this.ctx.printText(`Changelist #${change.name}: ${change.description}`);
+                    this.ctx.printText("  (use p4 shelve to push them to server)");
                 }
                 for (const file of change.files) {
                     const color = ActionsMapping.color[file.action];
-                    logInfo(color(`\t[${ActionsMapping.short[file.action]}] ${file.depotFile}`));
+                    this.ctx.printText(color(`\t[${ActionsMapping.short[file.action]}] ${file.depotFile}`));
                 }
-                logInfo();
+                this.ctx.printText();
             }
             for (const message of this.messages) {
-                logInfo(message.data.trim());
+                this.ctx.printText(message.data.trim());
             }
             for (const error of this.errors) {
-                logError(error.data.trim());
+                this.ctx.printError(error.data.trim());
             }
         }
         return this.changes;

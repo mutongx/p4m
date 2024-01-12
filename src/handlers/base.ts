@@ -1,4 +1,5 @@
-import Buffers from "../buffers";
+import type Buffers from "../common/buffers";
+import type Context from "../common/context";
 
 export interface HandlerOption {
     root?: boolean;
@@ -26,9 +27,11 @@ export interface TextMessage {
 
 export default abstract class Handler<T> {
 
+    ctx: Context;
     option: HandlerOption;
 
-    constructor(option: HandlerOption = {}) {
+    constructor(ctx: Context, option: HandlerOption = {}) {
+        this.ctx = ctx;
         this.option = option;
     }
 

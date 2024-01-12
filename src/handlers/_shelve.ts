@@ -3,9 +3,7 @@ import { Texts, ActionsMapping } from "./consts";
 import { parse, ShelvedFileSpec } from "./p4object";
 import ChangeHandler from "./_change";
 
-import Buffers from "../buffers";
-import { run } from "../run";
-import { logError, logInfo } from "../logger";
+import Buffers from "../common/buffers";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import type { P4Object } from "./p4object";
@@ -37,8 +35,8 @@ export default class ShelveHandler extends Handler<Shelve | null> {
             }
             if (this.shelve === null) {
                 this.shelve = { name: sf.change, files: [] };
-                const handler = new ChangeHandler();
-                this.descriptionPromise = run("change", ["-o", this.shelve.name], handler);
+                const handler = new ChangeHandler(this.ctx);
+                this.descriptionPromise = this.ctx.runP4("change", ["-o", this.shelve.name], handler);
             }
         }
         if (this.shelve === null) {
@@ -60,14 +58,14 @@ export default class ShelveHandler extends Handler<Shelve | null> {
         if (this.option.root && lastErrorMessage?.startsWith(Texts.errorInChange)) {
             this.errors.pop();
             // Print out the error data and pop it out
-            logInfo(lastErrorMessage, false);
+            this.ctx.printText(lastErrorMessage, false);
             // Consume the continuation prompt, don't give it to MarshalParser
             const continueBuffer = buffers.consume(Texts.hitReturnToContinue.length);
             if (!continueBuffer || continueBuffer.toString() !== Texts.hitReturnToContinue) {
                 throw new Error("failed to parse continue text");
             }
             // Print it out to user
-            logInfo(Texts.hitReturnToContinue, false);
+            this.ctx.printText(Texts.hitReturnToContinue, false);
         }
     }
 
@@ -77,17 +75,17 @@ export default class ShelveHandler extends Handler<Shelve | null> {
         }
         if (this.option.root) {
             if (this.shelve) {
-                logInfo(`Shelved changelist #${this.shelve.name}: ${this.shelve.description}`);
+                this.ctx.printText(`Shelved changelist #${this.shelve.name}: ${this.shelve.description}`);
                 for (const file of this.shelve.files) {
                     const color = ActionsMapping.color[file.action];
-                    logInfo(color(`\t[${ActionsMapping.short[file.action]}] ${file.depotFile}`));
+                    this.ctx.printText(color(`\t[${ActionsMapping.short[file.action]}] ${file.depotFile}`));
                 }
             }
             for (const message of this.messages) {
-                logInfo(message.data.trim());
+                this.ctx.printText(message.data.trim());
             }
             for (const error of this.errors) {
-                logError(error.data.trim());
+                this.ctx.printError(error.data.trim());
             }
         }
         return this.shelve;

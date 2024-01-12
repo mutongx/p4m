@@ -2,8 +2,6 @@ import Handler from "./base";
 import { ActionsMapping } from "./consts";
 import { parse, ShelvedFileSpec } from "./p4object";
 
-import { logError, logInfo } from "../logger";
-
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import type { P4Object } from "./p4object";
 
@@ -45,16 +43,16 @@ export default class UnshelveHandler extends Handler<UnshelvedFile[]> {
         if (this.option.root) {
             for (const file of this.files) {
                 const color = ActionsMapping.color[file.action];
-                logInfo(color(`[${ActionsMapping.short[file.action]}] ${file.depotFile}`));
+                this.ctx.printText(color(`[${ActionsMapping.short[file.action]}] ${file.depotFile}`));
                 for (const message of file.messages) {
-                    logInfo(`  - ${message}`);
+                    this.ctx.printText(`  - ${message}`);
                 }
             }
             for (const message of this.messages) {
-                logInfo(message.data.trim());
+                this.ctx.printText(message.data.trim());
             }
             for (const error of this.errors) {
-                logError(error.data.trim());
+                this.ctx.printError(error.data.trim());
             }
         }
         return this.files;
