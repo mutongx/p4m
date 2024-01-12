@@ -74,35 +74,35 @@ export class MarshalParser {
     setValue(value: unknown) {
         const ptr = this.ptr(true)!;
         switch (ptr.type) {
-        case "root":
-            this.root = value;
-            this.ptrs.pop();
-            break;
-        case "dict":
-            if (ptr.objKey === undefined) {
-                ptr.objKey = value;
-            } else {
-                (ptr.obj as Map<unknown, unknown>).set(ptr.objKey, value);
-                ptr.objKey = undefined;
-            }
-            ptr.dataType = undefined;
-            break;
-        default:
-            throw new Error("should never reach this");
+            case "root":
+                this.root = value;
+                this.ptrs.pop();
+                break;
+            case "dict":
+                if (ptr.objKey === undefined) {
+                    ptr.objKey = value;
+                } else {
+                    (ptr.obj as Map<unknown, unknown>).set(ptr.objKey, value);
+                    ptr.objKey = undefined;
+                }
+                ptr.dataType = undefined;
+                break;
+            default:
+                throw new Error("should never reach this");
         }
     }
 
     handleNull(): boolean {
         const ptr = this.ptr(true)!;
         switch (ptr.type) {
-        case "root":
-            throw new Error("encountered null in root object");
-        case "dict":
-            if (ptr.objKey !== undefined) {
-                throw new Error("incomplete dict");
-            }
-            this.ptrs.pop();
-            this.ptrs.pop();
+            case "root":
+                throw new Error("encountered null in root object");
+            case "dict":
+                if (ptr.objKey !== undefined) {
+                    throw new Error("incomplete dict");
+                }
+                this.ptrs.pop();
+                this.ptrs.pop();
         }
         return true;
     }
@@ -181,17 +181,17 @@ export class MarshalParser {
     handleDict(): boolean {
         const ptr = this.ptr(true)!;
         switch (ptr.type) {
-        case "root":
-            this.root = new Map();
-            this.ptrs.push({
-                "type": "dict",
-                "dirty": false,
-                "obj": this.root,
-                "objKey": undefined
-            });
-            break;
-        default:
-            throw new Error("should never reach this");
+            case "root":
+                this.root = new Map();
+                this.ptrs.push({
+                    "type": "dict",
+                    "dirty": false,
+                    "obj": this.root,
+                    "objKey": undefined
+                });
+                break;
+            default:
+                throw new Error("should never reach this");
         }
         return true;
     }
@@ -205,56 +205,56 @@ export class MarshalParser {
             return this.parseType();
         }
         switch (ptr.dataType) {
-        case DataType.Null:
-            return this.handleNull();
-        case DataType.None:
-            return this.handleNone();
-        case DataType.False:
-            return this.handleFalse();
-        case DataType.True:
-            return this.handleTrue();
-        case DataType.StopIter:
-            throw new Error("StopIter is not supported");
-        case DataType.Ellipsis:
-            throw new Error("Ellipsis is not supported");
-        case DataType.Int:
-            return this.handleInt();
-        case DataType.Int64:
-            return this.handleInt64();
-        case DataType.Float:
-            return this.handleFloat();
-        case DataType.BinaryFloat:
-            return this.handleBinaryFloat();
-        case DataType.Complex:
-            throw new Error("Complex is not supported");
-        case DataType.BinaryComplex:
-            throw new Error("BinaryComplex is not supported");
-        case DataType.Long:
-            throw new Error("Long is not supported");
-        case DataType.String:
-            return this.handleString();
-        case DataType.Interned:
-            throw new Error("Interned is not supported");
-        case DataType.Stringref:
-            throw new Error("Stringref is not supported");
-        case DataType.Tuple:
-            throw new Error("Tuple is not supported");
-        case DataType.List:
-            throw new Error("List is not supported");
-        case DataType.Dict:
-            return this.handleDict();
-        case DataType.Code:
-            throw new Error("Code is not supported");
-        case DataType.Unicode:
-            throw new Error("Unicode is not supported");
-        case DataType.Unknown:
-            throw new Error("Unknown is not supported");
-        case DataType.Set:
-            throw new Error("Set is not supported");
-        case DataType.Frozenset:
-            throw new Error("Frozenset is not supported");
-        default:
-            throw new Error(`unrecognized type: ${ptr.dataType}`);
+            case DataType.Null:
+                return this.handleNull();
+            case DataType.None:
+                return this.handleNone();
+            case DataType.False:
+                return this.handleFalse();
+            case DataType.True:
+                return this.handleTrue();
+            case DataType.StopIter:
+                throw new Error("StopIter is not supported");
+            case DataType.Ellipsis:
+                throw new Error("Ellipsis is not supported");
+            case DataType.Int:
+                return this.handleInt();
+            case DataType.Int64:
+                return this.handleInt64();
+            case DataType.Float:
+                return this.handleFloat();
+            case DataType.BinaryFloat:
+                return this.handleBinaryFloat();
+            case DataType.Complex:
+                throw new Error("Complex is not supported");
+            case DataType.BinaryComplex:
+                throw new Error("BinaryComplex is not supported");
+            case DataType.Long:
+                throw new Error("Long is not supported");
+            case DataType.String:
+                return this.handleString();
+            case DataType.Interned:
+                throw new Error("Interned is not supported");
+            case DataType.Stringref:
+                throw new Error("Stringref is not supported");
+            case DataType.Tuple:
+                throw new Error("Tuple is not supported");
+            case DataType.List:
+                throw new Error("List is not supported");
+            case DataType.Dict:
+                return this.handleDict();
+            case DataType.Code:
+                throw new Error("Code is not supported");
+            case DataType.Unicode:
+                throw new Error("Unicode is not supported");
+            case DataType.Unknown:
+                throw new Error("Unknown is not supported");
+            case DataType.Set:
+                throw new Error("Set is not supported");
+            case DataType.Frozenset:
+                throw new Error("Frozenset is not supported");
+            default:
+                throw new Error(`unrecognized type: ${ptr.dataType}`);
         }
     }
 
