@@ -13,7 +13,8 @@ module.exports = {
                 "node": true
             },
             "files": [
-                "*.js",
+                ".eslintrc.js",
+                "jest.config.js",
             ],
             "parserOptions": {
                 "sourceType": "script"
@@ -26,22 +27,23 @@ module.exports = {
         "sourceType": "module"
     },
     "plugins": [
+        "@stylistic",
         "@typescript-eslint"
     ],
     "rules": {
-        "indent": [
+        "@stylistic/indent": [
             "error",
             4
         ],
-        "linebreak-style": [
+        "@stylistic/linebreak-style": [
             "error",
             "unix"
         ],
-        "quotes": [
+        "@stylistic/quotes": [
             "error",
             "double"
         ],
-        "semi": [
+        "@stylistic/semi": [
             "error",
             "always"
         ]

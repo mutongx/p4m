@@ -10,6 +10,7 @@
     "node-test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.5.3",
     "@types/bun": "latest",
     "@types/jest": "^29.5.11",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
