@@ -48,16 +48,16 @@ export default abstract class Handler<T> {
         const code = obj.get("code");
         obj.delete("code");
         switch (code) {
-        case "stat":
-            return this.stat({ data: obj });
-        case "info":
-            return this.info(Object.fromEntries(obj) as unknown as InfoMessage);
-        case "error":
-            return this.error(Object.fromEntries(obj) as unknown as ErrorMessage);
-        case "text":
-            return this.text(Object.fromEntries(obj) as unknown as TextMessage);
-        default:
-            throw new Error(`unrecognized code: ${code}`);
+            case "stat":
+                return this.stat({ data: obj });
+            case "info":
+                return this.info(Object.fromEntries(obj) as unknown as InfoMessage);
+            case "error":
+                return this.error(Object.fromEntries(obj) as unknown as ErrorMessage);
+            case "text":
+                return this.text(Object.fromEntries(obj) as unknown as TextMessage);
+            default:
+                throw new Error(`unrecognized code: ${code}`);
         }
     }
 

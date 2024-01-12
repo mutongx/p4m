@@ -4,16 +4,16 @@ interface ObjectSpec extends Record<string, ValueSpec> {}
 
 type TypeSpecToType<T extends TypeSpec> =
     T extends ObjectSpec ? P4Object<T> :
-    T extends "string" ? string :
-    T extends "number" ? number :
-    never;
+        T extends "string" ? string :
+            T extends "number" ? number :
+                never;
 
 export type P4Object<T extends ObjectSpec> = {
     [K in keyof T]:
-	T[K][0] extends "required" ? TypeSpecToType<T[K][1]> :
+    T[K][0] extends "required" ? TypeSpecToType<T[K][1]> :
         T[K][0] extends "optional" ? TypeSpecToType<T[K][1]> | undefined :
-        T[K][0] extends "array" ? Array<TypeSpecToType<T[K][1]>> :
-        never;
+            T[K][0] extends "array" ? Array<TypeSpecToType<T[K][1]>> :
+                never;
 };
 
 export const FileActionSpec = {
