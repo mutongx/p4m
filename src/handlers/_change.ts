@@ -2,7 +2,7 @@ import Handler from "./base";
 import { Texts } from "./consts";
 import { parse, ChangeConfigSpec } from "./p4object";
 
-import Buffers from "../common/buffers";
+import type Buffers from "../common/buffers";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import type { P4Object } from "./p4object";

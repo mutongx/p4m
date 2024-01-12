@@ -1,4 +1,4 @@
-import Handler from "../handlers/base";
+import type Handler from "../handlers/base";
 
 export default interface Context {
     runP4: <T>(command: string, args: string[], handler: Handler<T>) => Promise<T>;

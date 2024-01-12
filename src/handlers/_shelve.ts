@@ -3,7 +3,7 @@ import { Texts, ActionsMapping } from "./consts";
 import { parse, ShelvedFileSpec } from "./p4object";
 import ChangeHandler from "./_change";
 
-import Buffers from "../common/buffers";
+import type Buffers from "../common/buffers";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import type { P4Object } from "./p4object";
