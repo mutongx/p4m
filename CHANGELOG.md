@@ -6,6 +6,15 @@
 
 - Add Node.js back to run unit tests to ensure node compatibility
 
+### Changed
+
+- Use `@stylistic` to replace eslint formatting rules
+- Added a Context type to prepare for future integration with other tools
+
+### Fixed
+
+- Some wrong Bun usage fixes
+
 ## [0.5.1] - 2024-01-10
 
 ### Fixed
