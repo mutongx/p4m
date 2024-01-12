@@ -5,7 +5,7 @@ import ChangeHandler, { type ChangeConfig } from "./_change";
 
 import Buffers from "../buffers";
 import { run } from "../run";
-import { Texts, ActionsMapping } from "../consts";
+import { Texts, ActionsMapping } from "./consts";
 import { logError, logInfo } from "../logger";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";

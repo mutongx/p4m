@@ -1,7 +1,7 @@
 import Handler from "./base";
 import { parse, FileActionSpec } from "./p4object";
 
-import { ActionsMapping } from "../consts";
+import { ActionsMapping } from "./consts";
 import { logError, logInfo } from "../logger";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";

@@ -1,4 +1,3 @@
-import { Texts } from "./consts";
 import { MarshalParser } from "./marshal";
 import Handler from "./handlers/base";
 
@@ -50,7 +49,7 @@ export async function runEditor(args: string[]) {
         }
         const file = await Bun.file(args[0]);
         const text = await file.text();
-        const search = `\t${Texts.descriptionPlaceholder}`;
+        const search = "<enter description here>";
         let currentPos: number = 0;
         let currentLine: number = 0;
         let enterFound: boolean = false;
@@ -59,7 +58,7 @@ export async function runEditor(args: string[]) {
             if (nextLinePos == -1) {
                 nextLinePos = text.length;
             }
-            if (text.substring(currentPos, nextLinePos) === search) {
+            if (text.substring(currentPos, nextLinePos) === `\t${search}`) {
                 enterFound = true;
                 break;
             }
@@ -67,7 +66,7 @@ export async function runEditor(args: string[]) {
             currentLine += 1;
         }
         if (enterFound) {
-            return [`+${currentLine + 1}`, "-c", `s/${Texts.descriptionPlaceholder}//`, "-c", "startinsert"];
+            return [`+${currentLine + 1}`, "-c", `s/${search}//`, "-c", "startinsert"];
         } else {
             return [];
         }

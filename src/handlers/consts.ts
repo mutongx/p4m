@@ -11,7 +11,6 @@ function DefaultProxy<T>(target: Record<string, T>, fn: (prop: string) => T) {
 export const Texts = {
     errorInChange: "Error in change specification.",
     hitReturnToContinue: "Hit return to continue...",
-    descriptionPlaceholder: "<enter description here>",
 };
 
 export const ActionsMapping = {

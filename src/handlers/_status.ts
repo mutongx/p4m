@@ -3,7 +3,7 @@ import { parse, FileStatusSpec } from "./p4object";
 import ChangeHandler, { type ChangeConfig } from "./_change";
 
 import { run } from "../run";
-import { ActionsMapping } from "../consts";
+import { ActionsMapping } from "./consts";
 import { logError, logInfo } from "../logger";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";

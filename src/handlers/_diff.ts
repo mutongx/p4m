@@ -1,4 +1,4 @@
-import { DiffColorMapping } from "../consts";
+import { DiffColorMapping } from "./consts";
 import { logError, logInfo } from "../logger";
 import { runPager } from "../run";
 import Handler from "./base";
