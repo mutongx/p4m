@@ -1,13 +1,15 @@
 import Handler from "./base";
+import { ActionsMapping } from "./consts";
 import { parse, FileStatusSpec } from "./p4object";
-import ChangeHandler, { type ChangeConfig } from "./_change";
+import ChangeHandler from "./_change";
 
 import { run } from "../run";
-import { ActionsMapping } from "./consts";
+
 import { logError, logInfo } from "../logger";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import type { P4Object } from "./p4object";
+import type { ChangeConfig } from "./_change";
 
 interface FileStatus extends P4Object<typeof FileStatusSpec> {
     messages: string[];

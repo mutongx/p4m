@@ -1,8 +1,8 @@
 import Handler from "./base";
+import { Texts } from "./consts";
 import { parse, ChangeConfigSpec } from "./p4object";
 
 import Buffers from "../buffers";
-import { Texts } from "./consts";
 import { logError, logInfo } from "../logger";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";

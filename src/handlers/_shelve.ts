@@ -1,15 +1,15 @@
 import Handler from "./base";
+import { Texts, ActionsMapping } from "./consts";
 import { parse, ShelvedFileSpec } from "./p4object";
-
-import ChangeHandler, { type ChangeConfig } from "./_change";
+import ChangeHandler from "./_change";
 
 import Buffers from "../buffers";
 import { run } from "../run";
-import { Texts, ActionsMapping } from "./consts";
 import { logError, logInfo } from "../logger";
 
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import type { P4Object } from "./p4object";
+import type { ChangeConfig } from "./_change";
 
 // TODO: Fix duplicated code with ChangeHandler
 

@@ -1,8 +1,9 @@
+import Handler from "./base";
 import { DiffColorMapping } from "./consts";
+import { parse, DiffItemSpec } from "./p4object";
+
 import { logError, logInfo } from "../logger";
 import { runPager } from "../run";
-import Handler from "./base";
-import { parse, DiffItemSpec } from "./p4object";
 
 import type { ErrorMessage, InfoMessage, StatMessage, TextMessage, HandlerOption } from "./base";
 import type { P4Object } from "./p4object";
