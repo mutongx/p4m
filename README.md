@@ -60,7 +60,3 @@ After installing, run `bun install` and `bun build-cli` to get the binary.
 I chose Bun because it provides cleaner file and child process interfaces. Also I have failed to figure out how Node handles stdio of child processes.
 
 However, except the file part and child process part, most of the code will remain compatible with Node. The unit test should work under Node and Bun environments.
-
-## Bugs
-
-- `p4 change -o` will output in JSON instead of `p4`'s text format. Use `p4 -I change -o` as a temporary workaround for now (`p4m` will skip its processing if any `p4` command-line options are set).
