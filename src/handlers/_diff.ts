@@ -134,18 +134,21 @@ export default class DiffHandler extends Handler<Diff[]> {
     async finalize() {
         if (this.option.root) {
             if (this.diffs.length > 0) {
-                const pager = await this.ctx.newPager();
+                const pager = this.ctx.newPager ? await this.ctx.newPager() : null;
+                const printer: (s: string) => void = pager ? pager.write : this.ctx.printText;
                 for (const d of this.diffs) {
-                    pager.write(`===== ${d.depotFile}#${d.rev} - ${d.clientFile} =====\n`);
-                    pager.write("\n");
+                    printer(`===== ${d.depotFile}#${d.rev} - ${d.clientFile} =====\n`);
+                    printer("\n");
                     for (const line of this.iterateLine(d.data!)) {
-                        pager.write(this.getColor(line)(line));
-                        pager.write("\n");
+                        printer(this.getColor(line)(line));
+                        printer("\n");
                     }
-                    pager.write("\n");
+                    printer("\n");
                 }
-                pager.end();
-                await pager.wait();
+                if (pager) {
+                    pager.end();
+                    await pager.wait();
+                }
             }
             // normal messages and errors does not use pager
             for (const message of this.messages) {

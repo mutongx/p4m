@@ -33,7 +33,9 @@ export default class StatusHandler extends Handler<Record<string, Change>> {
             this.changes[change] = { name: change, files: [] };
             if (change != "default" && change != "") {
                 const handler = new ChangeHandler(this.ctx);
-                this.descriptionPromises.push(this.ctx.runP4("change", ["-o", change], handler));
+                if (this.ctx.runP4) {
+                    this.descriptionPromises.push(this.ctx.runP4("change", ["-o", change], handler));
+                }
             }
         }
         this.changes[change].files.push(file);
