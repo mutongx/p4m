@@ -1,4 +1,4 @@
-import Buffers from "./buffers";
+import { BuffersConsumer } from "./buffers";
 
 enum DataType {
     Null = 0x30, // '0'
@@ -35,14 +35,13 @@ interface Pointer {
     objKey?: unknown
 }
 
-export class MarshalParser {
+export class MarshalParser extends BuffersConsumer {
 
-    buffers: Buffers;
     root: unknown;
     ptrs: Array<Pointer>;
 
     constructor() {
-        this.buffers = new Buffers();
+        super();
         this.root = undefined;
         this.ptrs = [];
     }
@@ -59,7 +58,7 @@ export class MarshalParser {
     }
 
     parseType(): boolean {
-        const type_buf = this.buffers.consume(1);
+        const type_buf = this.buffers!.consume(1);
         if (type_buf === null) {
             return false;
         }
@@ -123,7 +122,7 @@ export class MarshalParser {
     }
 
     handleInt(): boolean {
-        const buf = this.buffers.consume(4);
+        const buf = this.buffers!.consume(4);
         if (buf == null) {
             return false;
         }
@@ -132,7 +131,7 @@ export class MarshalParser {
     }
 
     handleInt64(): boolean {
-        const buf = this.buffers.consume(8);
+        const buf = this.buffers!.consume(8);
         if (buf == null) {
             return false;
         }
@@ -141,12 +140,12 @@ export class MarshalParser {
     }
 
     handleFloat(): boolean {
-        const sizeBuf = this.buffers.peek(1);
+        const sizeBuf = this.buffers!.peek(1);
         if (sizeBuf == null) {
             return false;
         }
         const size = sizeBuf[0];
-        const floatTextBuf = this.buffers.consume(1 + size);
+        const floatTextBuf = this.buffers!.consume(1 + size);
         if (floatTextBuf == null) {
             return false;
         }
@@ -156,7 +155,7 @@ export class MarshalParser {
     }
 
     handleBinaryFloat(): boolean {
-        const buf = this.buffers.consume(8);
+        const buf = this.buffers!.consume(8);
         if (buf == null) {
             return false;
         }
@@ -165,12 +164,12 @@ export class MarshalParser {
     }
 
     handleString(): boolean {
-        const sizeBuf = this.buffers.peek(4);
+        const sizeBuf = this.buffers!.peek(4);
         if (sizeBuf == null) {
             return false;
         }
         const size = sizeBuf.readInt32LE();
-        const stringBuf = this.buffers.consume(4 + size);
+        const stringBuf = this.buffers!.consume(4 + size);
         if (stringBuf == null) {
             return false;
         }
@@ -258,22 +257,21 @@ export class MarshalParser {
         }
     }
 
+
     begin() {
         this.ptrs.push({ "type": "root", "dirty": false });
     }
 
-    push(chunk: Buffer) {
-        this.buffers.push(chunk);
-    }
-
-    * iter() {
+    run() {
         while (this.parse()) {
             if (this.ptrs.length == 0) {
-                yield this.root;
+                const result = this.root;
                 this.root = undefined;
                 this.ptrs.push({ "type": "root", "dirty": false });
+                return { action: "response" as const, value: result, yield: true };
             }
         }
+        return { action: "request" as const };
     }
 
     end() {
