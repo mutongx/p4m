@@ -1,4 +1,5 @@
-import type Buffers from "../common/buffers";
+import { BuffersConsumer } from "../common/buffers";
+
 import type Context from "../common/context";
 
 export interface HandlerOption {
@@ -25,12 +26,13 @@ export interface TextMessage {
     data: string,
 }
 
-export default abstract class Handler<T> {
+export default abstract class Handler<T> extends BuffersConsumer {
 
     ctx: Context;
     option: HandlerOption;
 
     constructor(ctx: Context, option: HandlerOption = {}) {
+        super();
         this.ctx = ctx;
         this.option = option;
     }
@@ -39,8 +41,6 @@ export default abstract class Handler<T> {
     info(info: InfoMessage): void { info; }
     error(error: ErrorMessage): void { error; }
     text(text: TextMessage): void { text; }
-
-    take(buffers: Buffers): void { buffers; }
 
     abstract finalize(): Promise<T>;
 
