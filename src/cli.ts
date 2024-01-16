@@ -31,8 +31,8 @@ class CommandLineContext implements Context {
         const buffers = new Buffers();
         const parser = new MarshalParser();
         let consumer: BuffersConsumer = parser;
-        parser.begin();
         consumer.own(buffers);
+        parser.begin();
         while (true) {
             const runResult = consumer.run();
             if (runResult.action == "request") {
