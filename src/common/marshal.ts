@@ -268,7 +268,7 @@ export class MarshalParser extends BuffersConsumer {
                 const result = this.root;
                 this.root = undefined;
                 this.ptrs.push({ "type": "root", "dirty": false });
-                return { action: "response" as const, value: result, yield: true };
+                return { action: "response" as const, value: result };
             }
         }
         return { action: "request" as const };
