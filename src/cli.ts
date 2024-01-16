@@ -38,19 +38,21 @@ class CommandLineContext implements Context {
             if (runResult.action == "request") {
                 const readResult = await reader.read();
                 if (readResult.done) {
-                    if (consumer == handler) {
-                        throw new Error("handler is requesting data but stream is closed");
+                    if (runResult.must) {
+                        throw new Error("consumer is requesting data but stdout stream is closed");
                     }
                     break;
                 }
                 buffers.push(Buffer.from(readResult.value));
             } else if (runResult.action == "response") {
-                consumer.disown();
                 if (consumer == parser) {
                     handler.feed(runResult.value as Map<string, unknown>);
                 }
-                consumer = consumer == parser ? handler : parser;
-                consumer.own(buffers);
+                if (runResult.yield) {
+                    consumer.disown();
+                    consumer = consumer == parser ? handler : parser;
+                    consumer.own(buffers);
+                }
             }
         }
         parser.end();

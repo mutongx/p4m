@@ -58,7 +58,7 @@ export default class ShelveHandler extends Handler<Shelve | null> {
         if (lastErrorMessage?.startsWith(Texts.errorInChange)) {
             const peeked = this.buffers!.peek(Texts.hitReturnToContinue.length);
             if (peeked == null) {
-                return { action: "request" as const };
+                return { action: "request" as const, must: true };
             }
             if (peeked.toString() != Texts.hitReturnToContinue) {
                 throw new Error("failed to parse continue text");
@@ -70,7 +70,7 @@ export default class ShelveHandler extends Handler<Shelve | null> {
             // Print it out to user
             this.ctx.printText(Texts.hitReturnToContinue, false);
         }
-        return { action: "response" as const, value: null };
+        return { action: "response" as const, value: null, yield: true };
     }
 
     async finalize() {
