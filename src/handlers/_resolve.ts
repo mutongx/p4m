@@ -2,14 +2,16 @@ import Handler from "./base";
 import { Texts } from "./consts";
 import { parse } from "./p4object";
 
-import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
+import type { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "./base";
 import type { P4Object } from "./p4object";
 
 export default class ResolveHandler extends Handler<null> {
 
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
-    peekPrefixes: Set<string> = new Set(["Ac", ...Texts.confirmationPrompt.map((s) => s.substring(0, 2))]);
+
+    allText: string[] = [...Texts.mergeActionPrompt, ...Texts.confirmationPrompt, ...Texts.mergeHelpText];
+    allPrefix: Set<string> = new Set(this.allText.map((s) => s.substring(0, 3)));
 
     stat(stat: StatMessage) {
         // TODO
@@ -23,19 +25,20 @@ export default class ResolveHandler extends Handler<null> {
         this.errors.push(error);
     }
 
+    text(text: TextMessage) {
+        
+    }
+
     run() {
-        const peekPrefix = this.buffers!.peek(2);
+        const peekPrefix = this.buffers!.peek(3);
         if (!peekPrefix) {
             return { action: "request" as const, must: false };
         }
         const peekPrefixStr = peekPrefix.toString();
-        if (!this.peekPrefixes.has(peekPrefixStr)) {
-            return { action: "response" as const, value: null, yield: true };
-        }
-        if (peekPrefixStr == "Ac") {
+        if (this.allPrefix.has(peekPrefixStr)) {
             let peek: boolean = false;
             let match: string | null = null;
-            for (const toMatch of Texts.mergeActionPrompt) {
+            for (const toMatch of this.allText) {
                 const peekPrompt = this.buffers!.peek(toMatch.length);
                 if (!peekPrompt) {
                     continue;
@@ -50,46 +53,31 @@ export default class ResolveHandler extends Handler<null> {
                 return { action: "request" as const, must: true };
             }
             if (!match) {
-                throw new Error("failed to match merge action prompt string");
+                throw new Error("failed to match user prompt string");
             }
-            let promptStr: string | null = null;
-            for (let i = 2; i <= 10; ++i) {
-                const peekFull = this.buffers!.peek(match.length + i);
-                if (!peekFull) {
-                    return { action: "request" as const, must: false };
+            if (peekPrefixStr == "Acc") {  // TODO: Fix the hardcode
+                let promptStr: string | null = null;
+                for (let i = 2; i <= 10; ++i) {
+                    const peekFull = this.buffers!.peek(match.length + i);
+                    if (!peekFull) {
+                        return { action: "request" as const, must: false };
+                    }
+                    if (peekFull.at(peekFull.length - 2) == 58 /* ":" */ && peekFull.at(peekFull.length - 1) == 32 /* " " */) {
+                        promptStr = peekFull.toString();
+                        break;
+                    }
                 }
-                if (peekFull.at(peekFull.length - 2) == 58 /* ":" */ && peekFull.at(peekFull.length - 1) == 32 /* " " */) {
-                    promptStr = peekFull.toString();
-                    break;
+                if (!promptStr) {
+                    throw new Error("unable to find ': ' character in the promot string");
                 }
+                this.buffers!.consume(promptStr.length);
+                this.ctx.printText(promptStr, false);
+            } else {
+                this.buffers!.consume(match.length);
+                this.ctx.printText(match, false);
             }
-            if (!promptStr) {
-                throw new Error("unable to find ': ' character in the promot string");
-            }
-            this.buffers!.consume(promptStr.length);
-            this.ctx.printText(promptStr, false);
         } else {
-            let peek: boolean = false;
-            let match: string | null = null;
-            for (const toMatch of Texts.confirmationPrompt) {
-                const peekPrompt = this.buffers!.peek(toMatch.length);
-                if (!peekPrompt) {
-                    continue;
-                }
-                peek = true;
-                if (peekPrompt.toString() == toMatch) {
-                    match = toMatch;
-                    break;
-                }
-            }
-            if (!peek) {
-                return { action: "request" as const, must: true };
-            }
-            if (!match) {
-                throw new Error("failed to match confirmation prompt string");
-            }
-            this.buffers!.consume(match.length);
-            this.ctx.printText(match, false);
+            return { action: "response" as const, value: null, yield: true };
         }
         return { action: "response" as const, value: null, yield: false };
     }

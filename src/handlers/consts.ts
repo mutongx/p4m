@@ -20,7 +20,11 @@ export const Texts = {
         "There are still change markers: confirm accept (y/n)? ",
         "Use 'ae' to indicate original edits: confirm accept merge (y/n)? ",
         "This overrides your changes: confirm accept (y/n)? ",
-    ]
+    ],
+    mergeHelpText: [
+        "Three-way merge options:\n\n    Accept:\n            at              Keep only changes to their file.\n            ay              Keep only changes to your file.\n            am              Keep merged file.\n            ae              Keep merged and edited file.\n            a               Keep autoselected file.\n\n    Diff:\n            dt              See their changes alone.\n            dy              See your changes alone.\n            dm              See merged changes.\n            d               Diff your file against merged file.\n\n    Edit:\n            et              Edit their file (read only).\n            ey              Edit your file (read/write).\n            e               Edit merged file (read/write).\n\n    Misc:\n            m               Run '$P4MERGE base theirs yours merged'.\n            s               Skip this file.\n            h               Print this help message.\n            ^C              Quit the resolve operation.\n\nThe autoselected 'accept' option is shown in []'s on the prompt.\n\n",
+        "Two-way merge options:\n\n    Accept:\n            at              Keep only changes to their file.\n            ay              Keep only changes to your file.\n\n    Diff:\n            d               Diff their file against yours->\n\n    Edit:\n            et              Edit their file (read/write).\n            ey              Edit your file (read/write).\n\n    Misc:\n            s               Skip this file.\n            h               Print this help message.\n            ^C              Quit the resolve operation.\n\n",
+    ],
 };
 
 export const ActionsMapping = {
