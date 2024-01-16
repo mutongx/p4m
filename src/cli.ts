@@ -1,4 +1,5 @@
 import HandlerMapping from "./handlers";
+import { Buffers, BuffersConsumer } from "./common/buffers";
 import { MarshalParser } from "./common/marshal";
 
 import type Context from "./common/context";
@@ -17,6 +18,7 @@ class CommandLineContext implements Context {
             }
             return `${quote(process.execPath)} ${quote(Bun.main)}`;
         }
+
         const proc = Bun.spawn({
             cmd: ["p4", "-G", command, ...args],
             stdio: ["inherit", "pipe", "inherit"],
@@ -25,20 +27,37 @@ class CommandLineContext implements Context {
                 "P4EDITOR": `${getCallSelfCommand()} --P4M-EDITOR`,
             },
         });
+        const reader = proc.stdout.getReader();
+        const buffers = new Buffers();
         const parser = new MarshalParser();
+        let consumer: BuffersConsumer = parser;
         parser.begin();
-        for await (const chunk of proc.stdout) {
-            parser.push(Buffer.from(chunk));
-            for (const item of parser.iter()) {
-                handler.feed(item as Map<string, unknown>);
-                handler.take(parser.buffers);
+        consumer.own(buffers);
+        while (true) {
+            const runResult = consumer.run();
+            if (runResult.action == "request") {
+                const readResult = await reader.read();
+                if (readResult.done) {
+                    if (consumer == handler) {
+                        throw new Error("handler is requesting data but stream is closed");
+                    }
+                    break;
+                }
+                buffers.push(Buffer.from(readResult.value));
+            } else if (runResult.action == "response") {
+                consumer.disown();
+                if (consumer == parser) {
+                    handler.feed(runResult.value as Map<string, unknown>);
+                }
+                consumer = consumer == parser ? handler : parser;
+                consumer.own(buffers);
             }
         }
         parser.end();
         await proc.exited;
         return handler.finalize();
     }
-    
+
     newPager() {
         const proc = Bun.spawn({
             cmd: ["less", "-R"],
@@ -57,14 +76,14 @@ class CommandLineContext implements Context {
             process.stdout.write("\n");
         }
     }
-    
+
     printError(s: string = "", newline: boolean = true) {
         process.stderr.write(s);
         if (newline) {
             process.stderr.write("\n");
         }
     }
-    
+
 }
 
 async function mainPassthrough(args: string[]) {
