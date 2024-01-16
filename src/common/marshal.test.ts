@@ -1,5 +1,6 @@
 import child, { type ChildProcess } from "node:child_process";
 import { MarshalParser } from "./marshal";
+import { Buffers } from "./buffers";
 
 function generate(objects: string[], version: number = 0) {
     const lines: string[] = [
@@ -14,14 +15,21 @@ function generate(objects: string[], version: number = 0) {
 }
 
 async function parse(proc: ChildProcess) {
+    const buffers = new Buffers();
     const parser = new MarshalParser();
     const items: unknown[] = [];
-    parser.begin();
+    
     for await (const chunk of proc.stdout!) {
-        parser.push(Buffer.from(chunk));
-        for (const item of parser.iter()) {
-            items.push(item);
+        buffers.push(Buffer.from(chunk));
+    }
+    parser.own(buffers);
+    parser.begin();
+    while (true) {
+        const result = parser.run();
+        if (result.action == "request") {
+            break;
         }
+        items.push(result.value);
     }
     parser.end();
     await new Promise((resolve) => proc.on("close", resolve));
