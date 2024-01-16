@@ -1,4 +1,4 @@
-export default class Buffers {
+export class Buffers {
 
     buffers: Buffer[];
     pos: number;
@@ -57,6 +57,24 @@ export default class Buffers {
         }
         result -= this.pos;
         return result;
+    }
+
+}
+
+export class BuffersConsumer {
+
+    buffers: Buffers | null = null;
+
+    run(): { action: "request" } | { action: "response", value: unknown } {
+        return { "action": "response", value: null };
+    }
+    
+    own(buffers: Buffers) {
+        this.buffers = buffers;
+    }
+
+    disown() {
+        this.buffers = null;
     }
 
 }

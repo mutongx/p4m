@@ -1,4 +1,4 @@
-import Buffers from "./buffers";
+import { Buffers } from "./buffers";
 
 describe("Buffers", () => {
 
