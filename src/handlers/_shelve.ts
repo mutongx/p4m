@@ -3,8 +3,6 @@ import { Texts, ActionsMapping } from "./consts";
 import { parse, ShelvedFileSpec } from "./p4object";
 import ChangeHandler from "./_change";
 
-import type Buffers from "../common/buffers";
-
 import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import type { P4Object } from "./p4object";
 import type { ChangeConfig } from "./_change";
@@ -55,20 +53,24 @@ export default class ShelveHandler extends Handler<Shelve | null> {
         this.errors.push(error);
     }
 
-    take(buffers: Buffers) {
+    run() {
         const lastErrorMessage = this.errors.length > 0 ? this.errors[this.errors.length - 1].data : null;
-        if (this.option.root && lastErrorMessage?.startsWith(Texts.errorInChange)) {
+        if (lastErrorMessage?.startsWith(Texts.errorInChange)) {
+            const peeked = this.buffers!.peek(Texts.hitReturnToContinue.length);
+            if (peeked == null) {
+                return { action: "request" as const };
+            }
+            if (peeked.toString() != Texts.hitReturnToContinue) {
+                throw new Error("failed to parse continue text");
+            }
+            this.buffers!.consume(peeked.length);
             this.errors.pop();
             // Print out the error data and pop it out
             this.ctx.printText(lastErrorMessage, false);
-            // Consume the continuation prompt, don't give it to MarshalParser
-            const continueBuffer = buffers.consume(Texts.hitReturnToContinue.length);
-            if (!continueBuffer || continueBuffer.toString() !== Texts.hitReturnToContinue) {
-                throw new Error("failed to parse continue text");
-            }
             // Print it out to user
             this.ctx.printText(Texts.hitReturnToContinue, false);
         }
+        return { action: "response" as const, value: null };
     }
 
     async finalize() {
