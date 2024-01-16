@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.5.2] - 2024-01-16
 
 ### Added
 
@@ -10,6 +10,7 @@
 
 - Use `@stylistic` to replace eslint formatting rules
 - Added a Context type to prepare for future integration with other tools
+- Some p4 stdout handling changes to prepare for more fixibility
 
 ### Fixed
 
