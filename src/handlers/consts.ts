@@ -11,6 +11,16 @@ function DefaultProxy<T>(target: Record<string, T>, fn: (prop: string) => T) {
 export const Texts = {
     errorInChange: "Error in change specification.",
     hitReturnToContinue: "Hit return to continue...",
+    mergeActionPrompt: [
+        "Accept(a) Edit(e) Diff(d) Merge (m) Skip(s) Help(?) ",
+        "Accept (at/ay) Skip (s) Help (?) ",
+        "Accept (at/ay) Edit (et/ey) Skip (s) Help (?) ",
+    ],
+    confirmationPrompt: [
+        "There are still change markers: confirm accept (y/n)? ",
+        "Use 'ae' to indicate original edits: confirm accept merge (y/n)? ",
+        "This overrides your changes: confirm accept (y/n)? ",
+    ]
 };
 
 export const ActionsMapping = {
