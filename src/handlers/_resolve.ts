@@ -1,35 +1,34 @@
 import Handler from "./base";
 import { Texts } from "./consts";
-import { parse } from "./p4object";
+import { parse, ResolveTask, ResolveResult } from "./p4object";
 
 import type { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "./base";
 import type { P4Object } from "./p4object";
 
 export default class ResolveHandler extends Handler<null> {
-
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
 
     allText: string[] = [...Texts.mergeActionPrompt, ...Texts.confirmationPrompt, ...Texts.mergeHelpText];
     allPrefix: Set<string> = new Set(this.allText.map((s) => s.substring(0, 3)));
 
-    stat(stat: StatMessage) {
+    override stat(stat: StatMessage) {
         // TODO
     }
 
-    info(info: InfoMessage) {
+    override info(info: InfoMessage) {
         this.messages.push(info);
     }
 
-    error(error: ErrorMessage) {
+    override error(error: ErrorMessage) {
         this.errors.push(error);
     }
 
-    text(text: TextMessage) {
-        
+    override text(text: TextMessage) {
+        // TODO
     }
 
-    consume() {
+    override consume() {
         const peekPrefix = this.buffers!.peek(3);
         if (!peekPrefix) {
             return { action: "request" as const, must: false };
@@ -55,7 +54,7 @@ export default class ResolveHandler extends Handler<null> {
             if (!match) {
                 throw new Error("failed to match user prompt string");
             }
-            if (peekPrefixStr == "Acc") {  // TODO: Fix the hardcode
+            if (peekPrefixStr == "Acc") { // TODO: Fix the hardcode
                 let promptStr: string | null = null;
                 for (let i = 2; i <= 10; ++i) {
                     const peekFull = this.buffers!.peek(match.length + i);
@@ -85,5 +84,4 @@ export default class ResolveHandler extends Handler<null> {
     async finalize() {
         return null;
     }
-
 }

@@ -60,6 +60,22 @@ export const DiffItemSpec = {
     "type": ["required", "string"],
 } as const;
 
+export const ResolveTask = {
+    "clientFile": ["required", "string"],
+    "fromFile": ["required", "string"],
+    "startFromRev": ["required", "string"],
+    "endFromRev": ["required", "string"],
+    "resolveType": ["required", "string"],
+    "resolveFlag": ["required", "string"],
+    "contentResolveType": ["required", "string"],
+} as const;
+
+export const ResolveResult = {
+    "toFile": ["required", "string"],
+    "how": ["required", "string"],
+    "fromFile": ["required", "string"],
+} as const;
+
 export function parse<T extends ObjectSpec>(spec: T, message: Map<string, unknown>): P4Object<T> {
     const result: unknown = {};
     const prefixes: Record<string, string[]> = {};
