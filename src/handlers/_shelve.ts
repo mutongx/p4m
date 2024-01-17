@@ -12,13 +12,12 @@ import type { ChangeConfig } from "./_change";
 type ShelvedFile = P4Object<typeof ShelvedFileSpec>;
 
 export interface Shelve {
-    name: string,
-    description?: string,
-    files: ShelvedFile[],
+    name: string
+    description?: string
+    files: ShelvedFile[]
 }
 
 export default class ShelveHandler extends Handler<Shelve | null> {
-
     shelve: Shelve | null = null;
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
@@ -94,5 +93,4 @@ export default class ShelveHandler extends Handler<Shelve | null> {
         }
         return this.shelve;
     }
-
 }

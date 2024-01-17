@@ -8,11 +8,10 @@ import type { P4Object } from "./p4object";
 // TODO: Fix duplicated code with AddEditDeleteHandler
 
 export interface UnshelvedFile extends P4Object<typeof ShelvedFileSpec> {
-    messages: string[],
+    messages: string[]
 }
 
 export default class UnshelveHandler extends Handler<UnshelvedFile[]> {
-
     currentFile: UnshelvedFile | null = null;
     files: UnshelvedFile[] = [];
     messages: InfoMessage[] = [];
@@ -57,5 +56,4 @@ export default class UnshelveHandler extends Handler<UnshelvedFile[]> {
         }
         return this.files;
     }
-
 }

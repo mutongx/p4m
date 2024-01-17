@@ -8,7 +8,6 @@ import type { P4Object } from "./p4object";
 export type ChangeConfig = P4Object<typeof ChangeConfigSpec>;
 
 export default class ChangeHandler extends Handler<ChangeConfig | null> {
-
     change: ChangeConfig | null = null;
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
@@ -60,5 +59,4 @@ export default class ChangeHandler extends Handler<ChangeConfig | null> {
         }
         return this.change;
     }
-
 }

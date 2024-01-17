@@ -66,7 +66,6 @@ export function parse<T extends ObjectSpec>(spec: T, message: Map<string, unknow
 
     function initializeFromSpec(spec: ObjectSpec, prefix: string[], inArray: boolean) {
         function assign(prefix: string[], key: string, value: unknown) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             let obj = result as any;
             for (const p of prefix) {
                 obj = obj[p];
@@ -83,7 +82,7 @@ export function parse<T extends ObjectSpec>(spec: T, message: Map<string, unknow
                 assign(prefix, key, []);
                 inArrayNext = true;
             }
-            if (typeof type == "string") {   
+            if (typeof type == "string") {
                 if (!inArrayNext) {
                     assign(prefix, key, undefined);
                 }
@@ -115,7 +114,7 @@ export function parse<T extends ObjectSpec>(spec: T, message: Map<string, unknow
             if (Object.hasOwn(prefixes, realKey)) {
                 return [
                     key.substring(0, key.length - numberCount),
-                    parseInt(key.substring(key.length - numberCount))
+                    parseInt(key.substring(key.length - numberCount)),
                 ];
             }
         }
@@ -123,7 +122,6 @@ export function parse<T extends ObjectSpec>(spec: T, message: Map<string, unknow
     }
 
     function fillObject(prefix: string[], key: string, index: number | null, value: unknown) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         let obj = result as any;
         for (const item of prefix) {
             if (obj[item] === undefined) {

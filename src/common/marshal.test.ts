@@ -10,7 +10,7 @@ function generate(objects: string[], version: number = 0) {
     for (const o of objects) {
         lines.push(`marshal.dump(${o}, sys.stdout.buffer, ${version})`);
     }
-    // We still use Node.js API here 
+    // We still use Node.js API here
     return child.spawn("python3", ["-c", lines.join("\n")], { stdio: ["pipe", "pipe", "inherit"] });
 }
 
@@ -18,7 +18,7 @@ async function parse(proc: ChildProcess) {
     const buffers = new Buffers();
     const parser = new MarshalParser();
     const items: unknown[] = [];
-    
+
     for await (const chunk of proc.stdout!) {
         buffers.push(Buffer.from(chunk));
     }
@@ -37,7 +37,6 @@ async function parse(proc: ChildProcess) {
 }
 
 describe("literal", () => {
-
     test("none", async () => {
         const items = await parse(generate([
             "None",
@@ -120,5 +119,4 @@ describe("literal", () => {
             new Map([["1", "2"], ["3", "4"]]),
         ]);
     });
-
 });

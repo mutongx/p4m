@@ -10,7 +10,7 @@ import type { P4Object } from "./p4object";
 import type Context from "../common/context";
 
 export interface Diff extends P4Object<typeof DiffItemSpec> {
-    data: string | null,
+    data: string | null
 }
 
 enum DiffType {
@@ -21,7 +21,6 @@ enum DiffType {
 }
 
 export default class DiffHandler extends Handler<Diff[]> {
-
     diffType: DiffType = DiffType.Normal;
     currentDiff: Diff | null = null;
     diffs: Diff[] = [];
@@ -139,5 +138,4 @@ export default class DiffHandler extends Handler<Diff[]> {
         }
         return this.diffs;
     }
-
 }

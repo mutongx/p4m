@@ -36,7 +36,6 @@ interface Pointer {
 }
 
 export class MarshalParser extends BuffersConsumer {
-
     root: unknown;
     ptrs: Array<Pointer>;
 
@@ -186,7 +185,7 @@ export class MarshalParser extends BuffersConsumer {
                     "type": "dict",
                     "dirty": false,
                     "obj": this.root,
-                    "objKey": undefined
+                    "objKey": undefined,
                 });
                 break;
             default:
@@ -257,7 +256,6 @@ export class MarshalParser extends BuffersConsumer {
         }
     }
 
-
     begin() {
         this.ptrs.push({ "type": "root", "dirty": false });
     }
@@ -279,5 +277,4 @@ export class MarshalParser extends BuffersConsumer {
             throw new Error("incomplete stream");
         }
     }
-
 }

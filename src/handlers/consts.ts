@@ -4,7 +4,7 @@ function DefaultProxy<T>(target: Record<string, T>, fn: (prop: string) => T) {
     return new Proxy(target, {
         get: (target, p: string) => {
             return target[p] === undefined ? fn(p) : target[p];
-        }
+        },
     });
 }
 
@@ -51,7 +51,7 @@ export const ActionsMapping = {
         "move/add": "📑",
         "move/delete": "✂️",
         "branch": "🌵",
-    }, (a) => `❓<${a}>` ),
+    }, (a) => `❓<${a}>`),
     color: DefaultProxy({
         "add": chalk.green,
         "edit": chalk.yellow,

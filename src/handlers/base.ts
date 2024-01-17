@@ -3,31 +3,30 @@ import { BuffersConsumer } from "../common/buffers";
 import type Context from "../common/context";
 
 export interface HandlerOption {
-    root?: boolean;
-    args?: string[];
+    root?: boolean
+    args?: string[]
 }
 
 export interface StatMessage {
-    data: Map<string, unknown>,
+    data: Map<string, unknown>
 }
 
 export interface InfoMessage {
-    level: number,
-    data: string,
+    level: number
+    data: string
 }
 
 export interface ErrorMessage {
-    data: string,
-    severity: number,
-    generic: number,
+    data: string
+    severity: number
+    generic: number
 }
 
 export interface TextMessage {
-    data: string,
+    data: string
 }
 
 export default abstract class Handler<T> extends BuffersConsumer {
-
     ctx: Context;
     option: HandlerOption;
 
@@ -60,5 +59,4 @@ export default abstract class Handler<T> extends BuffersConsumer {
                 throw new Error(`unrecognized code: ${code}`);
         }
     }
-
 }

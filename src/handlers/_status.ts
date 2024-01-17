@@ -8,17 +8,16 @@ import type { P4Object } from "./p4object";
 import type { ChangeConfig } from "./_change";
 
 interface FileStatus extends P4Object<typeof FileStatusSpec> {
-    messages: string[];
+    messages: string[]
 }
 
 export interface Change {
-    name: string,
-    description?: string,
-    files: FileStatus[],
+    name: string
+    description?: string
+    files: FileStatus[]
 }
 
 export default class StatusHandler extends Handler<Record<string, Change>> {
-
     currentFile: FileStatus | null = null;
     changes: Record<string, Change> = {};
     messages: InfoMessage[] = [];
@@ -97,5 +96,4 @@ export default class StatusHandler extends Handler<Record<string, Change>> {
         }
         return this.changes;
     }
-
 }

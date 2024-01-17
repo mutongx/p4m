@@ -7,7 +7,6 @@ import type Context from "./common/context";
 import type Handler from "./handlers/base";
 
 class CommandLineContext implements Context {
-
     async runP4<T>(command: string, args: string[], handler: Handler<T>): Promise<T> {
         function getCallSelfCommand() {
             function quote(s: string) {
@@ -19,7 +18,6 @@ class CommandLineContext implements Context {
             }
             return `${quote(process.execPath)} ${quote(Bun.main)}`;
         }
-
         const proc = Bun.spawn({
             cmd: ["p4", "-G", command, ...args],
             stdio: ["inherit", "pipe", "inherit"],
@@ -86,7 +84,6 @@ class CommandLineContext implements Context {
             process.stderr.write("\n");
         }
     }
-
 }
 
 async function mainPassthrough(args: string[]) {

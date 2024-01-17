@@ -6,11 +6,10 @@ import type { ErrorMessage, InfoMessage, StatMessage } from "./base";
 import type { P4Object } from "./p4object";
 
 export interface FileAction extends P4Object<typeof FileActionSpec> {
-    messages: string[];
+    messages: string[]
 }
 
 export default class AddEditDeleteHandler extends Handler<FileAction[]> {
-
     currentAction: FileAction | null = null;
     actions: FileAction[] = [];
     messages: InfoMessage[] = [];
@@ -55,5 +54,4 @@ export default class AddEditDeleteHandler extends Handler<FileAction[]> {
         }
         return this.actions;
     }
-
 }

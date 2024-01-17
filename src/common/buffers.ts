@@ -1,5 +1,4 @@
 export class Buffers {
-
     buffers: Buffer[];
     pos: number;
 
@@ -58,17 +57,15 @@ export class Buffers {
         result -= this.pos;
         return result;
     }
-
 }
 
 export class BuffersConsumer {
-
     buffers: Buffers | null = null;
 
     consume(): { action: "request", must: boolean } | { action: "response", value: unknown, yield: boolean } {
-        return { "action": "response", value: null, yield: true };
+        return { action: "response", value: null, yield: true };
     }
-    
+
     own(buffers: Buffers) {
         this.buffers = buffers;
     }
@@ -76,5 +73,4 @@ export class BuffersConsumer {
     disown() {
         this.buffers = null;
     }
-
 }

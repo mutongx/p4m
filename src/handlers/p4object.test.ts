@@ -14,7 +14,6 @@ describe("ObjectSpect parse", () => {
             "stringField": "abcde",
             "numberField": 100,
         });
-
     });
 
     test("parse array field", () => {
@@ -56,7 +55,7 @@ describe("ObjectSpect parse", () => {
             "plainField": "abcd",
             "nestedObject": {
                 "nestedField": 10086,
-            }
+            },
         });
     });
 
@@ -80,8 +79,7 @@ describe("ObjectSpect parse", () => {
             "objectArray": [
                 { "objectArrayStringField": "efgh", "objectArrayNumberField": 1111 },
                 { "objectArrayStringField": "ijkl", "objectArrayNumberField": 2222 },
-            ]
+            ],
         });
     });
-
 });

@@ -1,9 +1,7 @@
 import { Buffers } from "./buffers";
 
 describe("Buffers", () => {
-
     test("parse single buffer", () => {
-
         const bufs = new Buffers();
         const b1 = Buffer.alloc(5, "abcde");
         bufs.push(b1);
@@ -36,11 +34,9 @@ describe("Buffers", () => {
         const c5 = bufs.consume(1);
         expect(c5).toBeNull();
         expect(bufs.buffers.length).toEqual(0);
-
     });
 
     test("parse two buffers", () => {
-
         const bufs = new Buffers();
         const b1 = Buffer.alloc(5, "abcde");
         const b2 = Buffer.alloc(3, "fgh");
@@ -75,12 +71,9 @@ describe("Buffers", () => {
         const p4 = bufs.peek(1);
         expect(p4).toBeNull();
         expect(bufs.buffers.length).toEqual(0);
-
     });
 
     test("parse three buffers", () => {
-
-
         const bufs = new Buffers();
         const b1 = Buffer.alloc(5, "abcde");
         const b2 = Buffer.alloc(3, "fgh");
@@ -99,7 +92,5 @@ describe("Buffers", () => {
         expect(c1).not.toBeNull();
         expect(Buffer.alloc(9, "abcdefghi").equals(c1!)).toBeTruthy();
         expect(bufs.buffers.length).toEqual(1);
-
     });
-
 });
