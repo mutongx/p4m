@@ -98,9 +98,6 @@ async function mainPassthrough(args: string[]) {
 
 async function mainEditor(args: string[]) {
     async function generateVimArgs(args: string[]): Promise<string[]> {
-        if (args.length != 1) {
-            return [];
-        }
         const file = await Bun.file(args[0]);
         const text = await file.text();
         const search = "<enter description here>";
@@ -126,6 +123,9 @@ async function mainEditor(args: string[]) {
         }
     }
     args.shift();
+    if (args.length != 1) {
+        throw new Error(`wrong argument count for editor: expected 1 but got ${args.length}`);
+    }
     const vimArgs = await generateVimArgs(args);
     const tty = Bun.file("/dev/tty");
     const proc = Bun.spawn({
