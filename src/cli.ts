@@ -1,6 +1,7 @@
 import HandlerMapping from "./handlers";
 import { Buffers, BuffersConsumer } from "./common/buffers";
 import { MarshalParser } from "./common/marshal";
+import { iterateLine } from "./common/iter";
 
 import type Context from "./common/context";
 import type Handler from "./handlers/base";
@@ -101,19 +102,13 @@ async function mainEditor(args: string[]) {
         const file = await Bun.file(args[0]);
         const text = await file.text();
         const search = "<enter description here>";
-        let currentPos: number = 0;
         let currentLine: number = 0;
         let enterFound: boolean = false;
-        while (currentPos < text.length) {
-            let nextLinePos = text.indexOf("\n", currentPos);
-            if (nextLinePos == -1) {
-                nextLinePos = text.length;
-            }
-            if (text.substring(currentPos, nextLinePos) === `\t${search}`) {
+        for (const line of iterateLine(text)) {
+            if (line == `\t${search}`) {
                 enterFound = true;
                 break;
             }
-            currentPos = nextLinePos + 1;
             currentLine += 1;
         }
         if (enterFound) {

@@ -2,10 +2,12 @@ import Handler from "./base";
 import { DiffColorMapping } from "./consts";
 import { parse, DiffItemSpec } from "./p4object";
 
-import type Context from "../common/context";
+import { iterateLine } from "../common/iter";
 
 import type { ErrorMessage, InfoMessage, StatMessage, TextMessage, HandlerOption } from "./base";
 import type { P4Object } from "./p4object";
+
+import type Context from "../common/context";
 
 export interface Diff extends P4Object<typeof DiffItemSpec> {
     data: string | null,
@@ -65,22 +67,6 @@ export default class DiffHandler extends Handler<Diff[]> {
         this.currentDiff!.data += text.data;
     }
 
-    *iterateLine(s: string) {
-        let pos = 0;
-        while (true) {
-            const next = s.indexOf("\n", pos);
-            if (next == -1) {
-                const last = s.substring(pos);
-                if (last.length != 0) {
-                    yield last;
-                }
-                break;
-            }
-            yield s.substring(pos, next);
-            pos = next + 1;
-        }
-    }
-
     getColor(s: string) {
         if (this.diffType == DiffType.Normal) {
             if (s.startsWith("<")) {
@@ -132,7 +118,7 @@ export default class DiffHandler extends Handler<Diff[]> {
                 for (const d of this.diffs) {
                     printer(`===== ${d.depotFile}#${d.rev} - ${d.clientFile} =====\n`);
                     printer("\n");
-                    for (const line of this.iterateLine(d.data!)) {
+                    for (const line of iterateLine(d.data!)) {
                         printer(this.getColor(line)(line));
                         printer("\n");
                     }
