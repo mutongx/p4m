@@ -29,7 +29,7 @@ export default class ResolveHandler extends Handler<null> {
         
     }
 
-    run() {
+    consume() {
         const peekPrefix = this.buffers!.peek(3);
         if (!peekPrefix) {
             return { action: "request" as const, must: false };

@@ -65,7 +65,7 @@ export class BuffersConsumer {
 
     buffers: Buffers | null = null;
 
-    run(): { action: "request", must: boolean } | { action: "response", value: unknown, yield: boolean } {
+    consume(): { action: "request", must: boolean } | { action: "response", value: unknown, yield: boolean } {
         return { "action": "response", value: null, yield: true };
     }
     

@@ -262,7 +262,7 @@ export class MarshalParser extends BuffersConsumer {
         this.ptrs.push({ "type": "root", "dirty": false });
     }
 
-    run() {
+    consume() {
         while (this.parse()) {
             if (this.ptrs.length == 0) {
                 const result = this.root;

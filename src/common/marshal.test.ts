@@ -25,7 +25,7 @@ async function parse(proc: ChildProcess) {
     parser.own(buffers);
     parser.begin();
     while (true) {
-        const result = parser.run();
+        const result = parser.consume();
         if (result.action == "request") {
             break;
         }

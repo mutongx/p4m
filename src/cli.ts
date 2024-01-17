@@ -34,7 +34,7 @@ class CommandLineContext implements Context {
         consumer.own(buffers);
         parser.begin();
         while (true) {
-            const runResult = consumer.run();
+            const runResult = consumer.consume();
             if (runResult.action == "request") {
                 const readResult = await reader.read();
                 if (readResult.done) {

@@ -53,7 +53,7 @@ export default class ShelveHandler extends Handler<Shelve | null> {
         this.errors.push(error);
     }
 
-    run() {
+    consume() {
         const lastErrorMessage = this.errors.length > 0 ? this.errors[this.errors.length - 1].data : null;
         if (lastErrorMessage?.startsWith(Texts.errorInChange)) {
             const peeked = this.buffers!.peek(Texts.hitReturnToContinue.length);
