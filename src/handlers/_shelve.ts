@@ -25,7 +25,7 @@ export default class ShelveHandler extends Handler<Shelve | null> {
 
     descriptionPromise: Promise<ChangeConfig | null> | null = null;
 
-    stat(stat: StatMessage) {
+    override stat(stat: StatMessage) {
         const sf = parse(ShelvedFileSpec, stat.data);
         if (sf.change) {
             if (this.shelve?.name && this.shelve.name !== sf.change) {
@@ -45,15 +45,15 @@ export default class ShelveHandler extends Handler<Shelve | null> {
         this.shelve.files.push(sf);
     }
 
-    info(info: InfoMessage) {
+    override info(info: InfoMessage) {
         this.messages.push(info);
     }
 
-    error(error: ErrorMessage) {
+    override error(error: ErrorMessage) {
         this.errors.push(error);
     }
 
-    consume() {
+    override consume() {
         const lastErrorMessage = this.errors.length > 0 ? this.errors[this.errors.length - 1].data : null;
         if (lastErrorMessage?.startsWith(Texts.errorInChange)) {
             const peeked = this.buffers!.peek(Texts.hitReturnToContinue.length);

@@ -13,19 +13,19 @@ export default class ChangeHandler extends Handler<ChangeConfig | null> {
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
 
-    stat(stat: StatMessage) {
+    override stat(stat: StatMessage) {
         this.change = parse(ChangeConfigSpec, stat.data);
     }
 
-    info(info: InfoMessage) {
+    override info(info: InfoMessage) {
         this.messages.push(info);
     }
 
-    error(error: ErrorMessage) {
+    override error(error: ErrorMessage) {
         this.errors.push(error);
     }
 
-    consume() {
+    override consume() {
         const lastErrorMessage = this.errors.length > 0 ? this.errors[this.errors.length - 1].data : null;
         if (lastErrorMessage?.startsWith(Texts.errorInChange)) {
             const peeked = this.buffers!.peek(Texts.hitReturnToContinue.length);

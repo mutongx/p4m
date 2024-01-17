@@ -16,13 +16,13 @@ export default class AddEditDeleteHandler extends Handler<FileAction[]> {
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
 
-    stat(stat: StatMessage) {
+    override stat(stat: StatMessage) {
         const action: FileAction = { ...parse(FileActionSpec, stat.data), messages: [] };
         this.actions.push(action);
         this.currentAction = action;
     }
 
-    info(info: InfoMessage) {
+    override info(info: InfoMessage) {
         const lastDash = info.data.lastIndexOf(" - ");
         const fileName = info.data.substring(0, lastDash);
         if (fileName == this.currentAction?.depotFile) {
@@ -33,7 +33,7 @@ export default class AddEditDeleteHandler extends Handler<FileAction[]> {
         }
     }
 
-    error(error: ErrorMessage) {
+    override error(error: ErrorMessage) {
         this.errors.push(error);
     }
 

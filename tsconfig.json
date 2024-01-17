@@ -16,6 +16,7 @@
     "skipLibCheck": true,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
     "forceConsistentCasingInFileNames": true,
   }
 }

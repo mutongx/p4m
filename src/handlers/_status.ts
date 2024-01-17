@@ -26,7 +26,7 @@ export default class StatusHandler extends Handler<Record<string, Change>> {
 
     descriptionPromises: Promise<ChangeConfig | null>[] = [];
 
-    stat(stat: StatMessage) {
+    override stat(stat: StatMessage) {
         const file: FileStatus = { ...parse(FileStatusSpec, stat.data), messages: [] };
         const change = file.change || "";
         if (this.changes[change] === undefined) {
@@ -42,7 +42,7 @@ export default class StatusHandler extends Handler<Record<string, Change>> {
         this.currentFile = file;
     }
 
-    info(info: InfoMessage) {
+    override info(info: InfoMessage) {
         const lastDash = info.data.lastIndexOf(" - ");
         const fileName = info.data.substring(0, lastDash);
         if (fileName == this.currentFile?.depotFile) {
@@ -53,7 +53,7 @@ export default class StatusHandler extends Handler<Record<string, Change>> {
         }
     }
 
-    error(error: ErrorMessage) {
+    override error(error: ErrorMessage) {
         this.errors.push(error);
     }
 

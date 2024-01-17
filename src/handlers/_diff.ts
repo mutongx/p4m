@@ -47,28 +47,21 @@ export default class DiffHandler extends Handler<Diff[]> {
         }
     }
 
-    flags() {
-        if (this.option.root) {
-            return { pager: true };
-        }
-        return {};
-    }
-
-    stat(stat: StatMessage) {
+    override stat(stat: StatMessage) {
         const d = { ...parse(DiffItemSpec, stat.data), data: "" };
         this.currentDiff = d;
         this.diffs.push(d);
     }
 
-    info(info: InfoMessage) {
+    override info(info: InfoMessage) {
         this.messages.push(info);
     }
 
-    error(error: ErrorMessage) {
+    override error(error: ErrorMessage) {
         this.errors.push(error);
     }
 
-    text(text: TextMessage) {
+    override text(text: TextMessage) {
         this.currentDiff!.data += text.data;
     }
 

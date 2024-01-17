@@ -18,13 +18,13 @@ export default class UnshelveHandler extends Handler<UnshelvedFile[]> {
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
 
-    stat(stat: StatMessage) {
+    override stat(stat: StatMessage) {
         const uf: UnshelvedFile = { ...parse(ShelvedFileSpec, stat.data), messages: [] };
         this.files.push(uf);
         this.currentFile = uf;
     }
 
-    info(info: InfoMessage) {
+    override info(info: InfoMessage) {
         const lastDash = info.data.lastIndexOf(" - ");
         const fileName = info.data.substring(0, lastDash);
         if (fileName == this.currentFile?.depotFile) {
@@ -35,7 +35,7 @@ export default class UnshelveHandler extends Handler<UnshelvedFile[]> {
         }
     }
 
-    error(error: ErrorMessage) {
+    override error(error: ErrorMessage) {
         this.errors.push(error);
     }
 
