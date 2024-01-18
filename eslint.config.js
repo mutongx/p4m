@@ -1,11 +1,16 @@
-/** @type {import('eslint').Linter.FlatConfig[]} */
+const eslintrc = require("@eslint/eslintrc");
+const parserTypeScript = require("@typescript-eslint/parser");
+const pluginTypeScript = require("@typescript-eslint/eslint-plugin");
+const pluginStylistic = require("@stylistic/eslint-plugin");
+
+/** @type {import("eslint").Linter.FlatConfig[]} */
 module.exports = [
     {
-        files: ["src/**/*.ts"],
+        files: ["src/**/*.ts", "*.config.js"],
         languageOptions: {
-            parser: require("@typescript-eslint/parser"),
+            parser: parserTypeScript,
         },
-        ...require("@stylistic/eslint-plugin").configs.customize({
+        ...pluginStylistic.configs.customize({
             indent: 4,
             quotes: "double",
             semi: true,
@@ -16,5 +21,18 @@ module.exports = [
             quoteProps: "consistent",
             commaDangle: "always-multiline",
         }),
+    },
+    ...new eslintrc.FlatCompat().plugins("@typescript-eslint"),
+    {
+        files: ["src/**/*.ts"],
+        languageOptions: {
+            parser: parserTypeScript,
+            parserOptions: {
+                project: true,
+            },
+        },
+        rules: {
+            ...pluginTypeScript.configs["recommended-type-checked"].rules,
+        },
     },
 ];
