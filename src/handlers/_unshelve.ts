@@ -38,7 +38,7 @@ export default class UnshelveHandler extends Handler<UnshelvedFile[]> {
         this.errors.push(error);
     }
 
-    async finalize() {
+    finalize() {
         if (this.option.root) {
             for (const file of this.files) {
                 const color = ActionsMapping.color[file.action];

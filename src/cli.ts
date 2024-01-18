@@ -66,7 +66,7 @@ class CommandLineContext implements Context {
         });
         return {
             write: (s: string = "") => { proc.stdin.write(s); },
-            end: () => { proc.stdin.end(); },
+            end: () => { void proc.stdin.end(); },
             wait: async () => { await proc.exited; },
         };
     }
@@ -96,7 +96,7 @@ async function mainPassthrough(args: string[]) {
 
 async function mainEditor(args: string[]) {
     async function generateVimArgs(args: string[]): Promise<string[]> {
-        const file = await Bun.file(args[0]);
+        const file = Bun.file(args[0]);
         const text = await file.text();
         const search = "<enter description here>";
         let currentLine: number = 0;
@@ -152,4 +152,4 @@ async function main() {
     return result;
 }
 
-main();
+await main();

@@ -41,7 +41,7 @@ export default abstract class Handler<T> extends BuffersConsumer {
     error(error: ErrorMessage): void { error; }
     text(text: TextMessage): void { text; }
 
-    abstract finalize(): Promise<T>;
+    abstract finalize(): Promise<T> | T;
 
     feed(obj: Map<string, unknown>): void {
         const code = obj.get("code");
@@ -56,7 +56,7 @@ export default abstract class Handler<T> extends BuffersConsumer {
             case "text":
                 return this.text(Object.fromEntries(obj) as unknown as TextMessage);
             default:
-                throw new Error(`unrecognized code: ${code}`);
+                throw new Error(`unrecognized code: ${code as string}`);
         }
     }
 }

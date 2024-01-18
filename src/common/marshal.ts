@@ -252,7 +252,7 @@ export class MarshalParser extends BuffersConsumer {
             case DataType.Frozenset:
                 throw new Error("Frozenset is not supported");
             default:
-                throw new Error(`unrecognized type: ${ptr.dataType}`);
+                throw new Error(`unrecognized type: ${ptr.dataType as number}`);
         }
     }
 

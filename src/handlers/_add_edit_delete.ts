@@ -36,7 +36,7 @@ export default class AddEditDeleteHandler extends Handler<FileAction[]> {
         this.errors.push(error);
     }
 
-    async finalize() {
+    finalize() {
         if (this.option.root) {
             for (const action of this.actions) {
                 const color = ActionsMapping.color[action.action];

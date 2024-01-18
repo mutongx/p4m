@@ -112,7 +112,7 @@ export default class DiffHandler extends Handler<Diff[]> {
     async finalize() {
         if (this.option.root) {
             if (this.diffs.length > 0) {
-                const pager = this.ctx.newPager ? await this.ctx.newPager() : null;
+                const pager = this.ctx.newPager ? this.ctx.newPager() : null;
                 const printer: (s: string) => void = pager ? pager.write : this.ctx.printText;
                 for (const d of this.diffs) {
                     printer(`===== ${d.depotFile}#${d.rev} - ${d.clientFile} =====\n`);

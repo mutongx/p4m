@@ -81,7 +81,7 @@ export default class ResolveHandler extends Handler<null> {
         return { action: "response" as const, value: null, yield: false };
     }
 
-    async finalize() {
+    finalize() {
         return null;
     }
 }

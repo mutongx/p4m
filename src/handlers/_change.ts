@@ -44,7 +44,7 @@ export default class ChangeHandler extends Handler<ChangeConfig | null> {
         return { action: "response" as const, value: null, yield: true };
     }
 
-    async finalize() {
+    finalize() {
         if (this.option.root) {
             if (this.change) {
                 // TODO: Output as Perforce's text format

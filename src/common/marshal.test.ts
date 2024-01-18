@@ -20,7 +20,7 @@ async function parse(proc: ChildProcess) {
     const items: unknown[] = [];
 
     for await (const chunk of proc.stdout!) {
-        buffers.push(Buffer.from(chunk));
+        buffers.push(chunk as Buffer);
     }
     parser.own(buffers);
     parser.begin();

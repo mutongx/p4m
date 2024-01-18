@@ -1,3 +1,8 @@
+/* eslint @typescript-eslint/no-explicit-any: 0 */
+/* eslint @typescript-eslint/no-unsafe-assignment: 0 */
+/* eslint @typescript-eslint/no-unsafe-member-access: 0 */
+/* eslint @typescript-eslint/no-unsafe-call: 0 */
+
 type TypeSpec = string | ObjectSpec;
 type ValueSpec = readonly [Storage: string, Type: TypeSpec];
 interface ObjectSpec extends Record<string, ValueSpec> {}
