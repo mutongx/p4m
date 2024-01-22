@@ -9,7 +9,7 @@ export class LineIterator {
         }
     }
 
-    cut(endIndex: number, endOffset: number) {
+    private cut(endIndex: number, endOffset: number) {
         const result: string[] = [];
         for (let idx = this.index; idx <= endIndex; ++idx) {
             const begin = idx == this.index ? this.offset : 0;
