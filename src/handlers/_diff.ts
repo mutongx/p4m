@@ -68,7 +68,7 @@ export default class DiffHandler extends Handler<Diff[]> {
                     printer(`===== ${d.depotFile}#${d.rev} - ${d.clientFile} =====\n`);
                     printer("\n");
                     for (const line of new LineIterator(d.data).iter(true)) {
-                        printer(colorDiff(this.diffType, line));
+                        printer(colorDiff(line, this.diffType));
                         printer("\n");
                     }
                     printer("\n");

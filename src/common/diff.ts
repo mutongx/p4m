@@ -15,7 +15,7 @@ export const DiffColorMapping = {
     modified: chalk.yellow,
 };
 
-export function colorDiff(type: DiffType, text: string) {
+export function colorDiff(text: string, type: DiffType = DiffType.Normal) {
     switch (type) {
         case DiffType.Normal:
             switch (true) {
