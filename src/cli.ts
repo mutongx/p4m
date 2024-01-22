@@ -1,7 +1,7 @@
 import HandlerMapping from "./handlers";
 import { Buffers, BuffersConsumer } from "./common/buffers";
 import { MarshalParser } from "./common/marshal";
-import { iterateLine } from "./common/iter";
+import { LineIterator } from "./common/iter";
 
 import type Context from "./common/context";
 import type Handler from "./handlers/base";
@@ -101,7 +101,7 @@ async function mainEditor(args: string[]) {
         const search = "<enter description here>";
         let currentLine: number = 0;
         let enterFound: boolean = false;
-        for (const line of iterateLine(text)) {
+        for (const line of new LineIterator(text).iter(true)) {
             if (line == `\t${search}`) {
                 enterFound = true;
                 break;

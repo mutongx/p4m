@@ -1,8 +1,8 @@
 import Handler from "./base";
-import { DiffColorMapping } from "./consts";
 import { parse, DiffItemSpec } from "./p4object";
 
-import { iterateLine } from "../common/iter";
+import { DiffType, colorDiff } from "../common/diff";
+import { LineIterator } from "../common/iter";
 
 import type { ErrorMessage, InfoMessage, StatMessage, TextMessage, HandlerOption } from "./base";
 import type { P4Object } from "./p4object";
@@ -11,13 +11,6 @@ import type Context from "../common/context";
 
 export interface Diff extends P4Object<typeof DiffItemSpec> {
     data: string | null
-}
-
-enum DiffType {
-    Normal,
-    Unknown,
-    Unified,
-    Context,
 }
 
 export default class DiffHandler extends Handler<Diff[]> {
@@ -66,49 +59,6 @@ export default class DiffHandler extends Handler<Diff[]> {
         this.currentDiff!.data += text.data;
     }
 
-    getColor(s: string) {
-        if (this.diffType == DiffType.Normal) {
-            if (s.startsWith("<")) {
-                return DiffColorMapping.deleted;
-            }
-            if (s.startsWith(">")) {
-                return DiffColorMapping.added;
-            }
-            if (s !== "---") {
-                return DiffColorMapping.context;
-            }
-            return DiffColorMapping.default;
-        }
-        if (this.diffType == DiffType.Unified) {
-            if (s.startsWith("@@ ")) {
-                return DiffColorMapping.context;
-            }
-            if (s.startsWith("-")) {
-                return DiffColorMapping.deleted;
-            }
-            if (s.startsWith("+")) {
-                return DiffColorMapping.added;
-            }
-            return DiffColorMapping.default;
-        }
-        if (this.diffType == DiffType.Context) {
-            if (s.startsWith("*** ") || s.startsWith("--- ") || s === "***************") {
-                return DiffColorMapping.context;
-            }
-            if (s.startsWith("!")) {
-                return DiffColorMapping.modified;
-            }
-            if (s.startsWith("-")) {
-                return DiffColorMapping.deleted;
-            }
-            if (s.startsWith("+")) {
-                return DiffColorMapping.added;
-            }
-            return DiffColorMapping.default;
-        }
-        return DiffColorMapping.default;
-    }
-
     async finalize() {
         if (this.option.root) {
             if (this.diffs.length > 0) {
@@ -117,8 +67,8 @@ export default class DiffHandler extends Handler<Diff[]> {
                 for (const d of this.diffs) {
                     printer(`===== ${d.depotFile}#${d.rev} - ${d.clientFile} =====\n`);
                     printer("\n");
-                    for (const line of iterateLine(d.data!)) {
-                        printer(this.getColor(line)(line));
+                    for (const line of new LineIterator(d.data).iter(true)) {
+                        printer(colorDiff(this.diffType, line));
                         printer("\n");
                     }
                     printer("\n");

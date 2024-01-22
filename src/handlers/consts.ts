@@ -61,11 +61,3 @@ export const ActionsMapping = {
         "branch": chalk.cyan,
     }, () => chalk.white),
 };
-
-export const DiffColorMapping = {
-    default: chalk.white,
-    context: chalk.cyan,
-    modified: chalk.yellow,
-    deleted: chalk.red,
-    added: chalk.green,
-};
