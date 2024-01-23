@@ -2,6 +2,9 @@ import Handler from "./base";
 import { Texts } from "./consts";
 import { parse, ResolveTask, ResolveResult } from "./p4object";
 
+import { LineIterator } from "../common/iter";
+import { colorDiff } from "../common/diff";
+
 import type { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "./base";
 import type { P4Object } from "./p4object";
 
@@ -25,7 +28,13 @@ export default class ResolveHandler extends Handler<null> {
     }
 
     override text(text: TextMessage) {
-        // TODO
+        if (!this.diffIter) {
+            this.diffIter = new LineIterator();
+        }
+        this.diffIter.put(text.data);
+        for (const line of this.diffIter.iter()) {
+            this.ctx.printText(colorDiff(line));
+        }
     }
 
     override consume() {
@@ -68,6 +77,13 @@ export default class ResolveHandler extends Handler<null> {
                 }
                 if (!promptStr) {
                     throw new Error("unable to find ': ' character in the promot string");
+                }
+                if (this.diffIter) {
+                    const end = this.diffIter.end();
+                    if (end) {
+                        this.ctx.printText(colorDiff(end));
+                    }
+                    this.diffIter = null;
                 }
                 this.buffers!.consume(promptStr.length);
                 this.ctx.printText(promptStr, false);
