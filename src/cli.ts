@@ -118,10 +118,29 @@ async function mainEditor(args: string[]) {
     if (args.length != 1) {
         throw new Error(`wrong argument count for editor: expected 1 but got ${args.length}`);
     }
+    const [file] = args;
     const vimArgs = await generateVimArgs(args);
     const tty = Bun.file("/dev/tty");
     const proc = Bun.spawn({
-        cmd: ["vim", ...vimArgs, ...args],
+        cmd: ["vim", ...vimArgs, file],
+        stdio: [tty, tty, "inherit"],
+    });
+    await proc.exited;
+}
+
+async function mainMerge(args: string[]) {
+    function generateVimArgs() {
+        return ["-d", "-c", "4wincmd w | wincmd J", "-c", "set mouse=a"];
+    }
+    args.shift();
+    if (args.length != 4) {
+        throw new Error(`wrong argument count for merge: expected 4 bit got ${args.length}`);
+    }
+    const [base, theirs, yours, merge] = args;
+    const vimArgs = generateVimArgs();
+    const tty = Bun.file("/dev/tty");
+    const proc = Bun.spawn({
+        cmd: ["vim", ...vimArgs, yours, base, theirs, merge],
         stdio: [tty, tty, "inherit"],
     });
     await proc.exited;
@@ -136,6 +155,9 @@ async function main() {
         if (args[0].startsWith("--P4M-")) {
             if (args[0] == "--P4M-EDITOR") {
                 return await mainEditor(args);
+            }
+            if (args[0] == "--P4M-MERGE") {
+                return await mainMerge(args);
             }
             throw new Error(`unknown command override: ${args[0]}`);
         }
