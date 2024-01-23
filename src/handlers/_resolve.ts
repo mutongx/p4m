@@ -21,8 +21,10 @@ export default class ResolveHandler extends Handler<null> {
 
     diffIter: LineIterator | null = null;
 
-    allText: string[] = [...Texts.mergeActionPrompt, ...Texts.confirmationPrompt, ...Texts.mergeHelpText];
+    allText: string[] = [...Texts.mergeActionPrompt, ...Texts.mergeHelpText, ...Texts.mergeConfirmationPrompt];
     allPrefix: Set<string> = new Set(this.allText.map((s) => s.substring(0, 3)));
+    actionPrefix: Set<string> = new Set(Texts.mergeActionPrompt.map((s) => s.substring(0, 3)));
+    helpPrefix: Set<string> = new Set(Texts.mergeHelpText.map((s) => s.substring(0, 3)));
 
     override stat(stat: StatMessage) {
         if (stat.data.has("resolveType")) {
@@ -97,20 +99,21 @@ export default class ResolveHandler extends Handler<null> {
             if (!match) {
                 throw new Error("failed to match user prompt string");
             }
-            if (peekPrefixStr == "Acc") { // TODO: Fix the hardcode
+            if (this.actionPrefix.has(peekPrefixStr)) {
                 let promptStr: string | null = null;
-                for (let i = 2; i <= 10; ++i) {
-                    const peekFull = this.buffers!.peek(match.length + i);
-                    if (!peekFull) {
+                // We assume that the ": " text is at most 100 chars away
+                for (let i = 0; i <= 100; ++i) {
+                    const peekEnd = this.buffers!.peek(2, i);
+                    if (!peekEnd) {
                         return { action: "request" as const, must: false };
                     }
-                    if (peekFull.at(peekFull.length - 2) == 58 /* ":" */ && peekFull.at(peekFull.length - 1) == 32 /* " " */) {
-                        promptStr = peekFull.toString();
+                    if (peekEnd.toString() == ": ") {
+                        promptStr = this.buffers!.consume(i + 2)!.toString();
                         break;
                     }
                 }
                 if (!promptStr) {
-                    throw new Error("unable to find ': ' character in the promot string");
+                    throw new Error("unable to the end of action prompt string");
                 }
                 if (this.diffIter) {
                     const end = this.diffIter.end();
@@ -119,8 +122,24 @@ export default class ResolveHandler extends Handler<null> {
                     }
                     this.diffIter = null;
                 }
-                this.buffers!.consume(promptStr.length);
                 this.ctx.printText(promptStr, false);
+            } else if (this.helpPrefix.has(peekPrefixStr)) {
+                let helpStr: string | null = null;
+                // We assume that the "\n\nAcc" text is at most 2000 chars away
+                for (let i = 0; i <= 2000; ++i) {
+                    const peekEnd = this.buffers!.peek(5, i);
+                    if (!peekEnd) {
+                        return { action: "request" as const, must: false };
+                    }
+                    if (peekEnd.toString() == "\n\nAcc") {
+                        helpStr = this.buffers!.consume(i + 2)!.toString();
+                        break;
+                    }
+                }
+                if (!helpStr) {
+                    throw new Error("unable to the end of help string");
+                }
+                this.ctx.printText(helpStr, false);
             } else {
                 this.buffers!.consume(match.length);
                 this.ctx.printText(match, false);
