@@ -65,7 +65,7 @@ export const DiffItemSpec = {
     "type": ["required", "string"],
 } as const;
 
-export const ResolveTask = {
+export const ResolveTaskSpec = {
     "clientFile": ["required", "string"],
     "fromFile": ["required", "string"],
     "startFromRev": ["required", "string"],
@@ -75,7 +75,7 @@ export const ResolveTask = {
     "contentResolveType": ["required", "string"],
 } as const;
 
-export const ResolveResult = {
+export const ResolveResultSpec = {
     "toFile": ["required", "string"],
     "how": ["required", "string"],
     "fromFile": ["required", "string"],

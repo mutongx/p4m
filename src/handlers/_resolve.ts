@@ -1,6 +1,6 @@
 import Handler from "./base";
 import { Texts } from "./consts";
-import { parse, ResolveTask, ResolveResult } from "./p4object";
+import { parse, ResolveTaskSpec, ResolveResultSpec } from "./p4object";
 
 import { LineIterator } from "../common/iter";
 import { colorDiff } from "../common/diff";
@@ -8,19 +8,53 @@ import { colorDiff } from "../common/diff";
 import type { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "./base";
 import type { P4Object } from "./p4object";
 
+export interface Resolve extends P4Object<typeof ResolveTaskSpec> {
+    result: P4Object<typeof ResolveResultSpec> | null
+}
+
 export default class ResolveHandler extends Handler<null> {
+    currentResolve: Resolve | null = null;
+    allResolve: Resolve[] = [];
+
     messages: InfoMessage[] = [];
     errors: ErrorMessage[] = [];
+
+    diffIter: LineIterator | null = null;
 
     allText: string[] = [...Texts.mergeActionPrompt, ...Texts.confirmationPrompt, ...Texts.mergeHelpText];
     allPrefix: Set<string> = new Set(this.allText.map((s) => s.substring(0, 3)));
 
     override stat(stat: StatMessage) {
-        // TODO
+        if (stat.data.has("resolveType")) {
+            const task = parse(ResolveTaskSpec, stat.data);
+            this.currentResolve = { ...task, result: null };
+            this.allResolve.push(this.currentResolve);
+            if (this.option.root) {
+                this.ctx.printText(`- To resolve: ${task.clientFile}`);
+                this.ctx.printText(`  Client revision: ${task.startFromRev}`);
+                this.ctx.printText(`  Target revision: ${task.endFromRev}`);
+            }
+        } else {
+            const result = parse(ResolveResultSpec, stat.data);
+            this.currentResolve!.result = result;
+            if (this.option.root) {
+                this.ctx.printText(`${result.toFile} - ${result.how} ${result.fromFile}`);
+            }
+        }
     }
 
     override info(info: InfoMessage) {
-        this.messages.push(info);
+        if (this.currentResolve) {
+            if (this.option.root) {
+                if (info.data.startsWith("Diff chunk: ")) {
+                    this.ctx.printText(`  ${info.data}`);
+                } else {
+                    this.ctx.printText(info.data);
+                }
+            }
+        } else {
+            this.messages.push(info);
+        }
     }
 
     override error(error: ErrorMessage) {
@@ -98,6 +132,14 @@ export default class ResolveHandler extends Handler<null> {
     }
 
     finalize() {
+        if (this.option.root) {
+            for (const message of this.messages) {
+                this.ctx.printText(message.data.trim());
+            }
+            for (const error of this.errors) {
+                this.ctx.printError(error.data.trim());
+            }
+        }
         return null;
     }
 }
