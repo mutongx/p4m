@@ -35,6 +35,7 @@ export const ActionsMapping = {
         "move/add": "MA",
         "move/delete": "MD",
         "branch": "B",
+        "integrate": "IN",
     }, (a) => `UNK<${a}>`),
     short: DefaultProxy({
         "add": " add",
@@ -43,6 +44,7 @@ export const ActionsMapping = {
         "move/add": "madd",
         "move/delete": "mdel",
         "branch": "brch",
+        "integrate": "intg",
     }, (a) => `unknown<${a}>`),
     emoji: DefaultProxy({
         "add": "✨",
@@ -51,6 +53,7 @@ export const ActionsMapping = {
         "move/add": "📑",
         "move/delete": "✂️",
         "branch": "🌵",
+        "integrate": "🔗",
     }, (a) => `❓<${a}>`),
     color: DefaultProxy({
         "add": chalk.green,
@@ -59,5 +62,6 @@ export const ActionsMapping = {
         "move/add": chalk.green,
         "move/delete": chalk.red,
         "branch": chalk.cyan,
+        "integrate": chalk.magenta,
     }, () => chalk.white),
 };
