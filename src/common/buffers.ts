@@ -11,8 +11,8 @@ export class Buffers {
         this.buffers.push(buf);
     }
 
-    peek(size: number): Buffer | null {
-        if (size > this.size()) {
+    peek(size: number, skip: number = 0): Buffer | null {
+        if (size + skip > this.size()) {
             return null;
         }
 
@@ -21,6 +21,18 @@ export class Buffers {
         let remaining = size;
         let pos = this.pos;
         let index = 0;
+
+        while (skip > 0) {
+            const buf = this.buffers[index];
+            if ((buf.length - pos) <= skip) {
+                index += 1;
+                skip -= buf.length;
+                pos = 0;
+            } else {
+                pos += skip;
+                skip = 0;
+            }
+        }
 
         while (remaining > 0) {
             const buf = this.buffers[index];

@@ -12,6 +12,19 @@ describe("Buffers", () => {
         expect(Buffer.alloc(1, "a").equals(p1!)).toBeTruthy();
         expect(bufs.buffers.length).toEqual(1);
 
+        const p2 = bufs.peek(1, 2);
+        expect(p2).not.toBeNull();
+        expect(Buffer.alloc(1, "c").equals(p2!)).toBeTruthy();
+        expect(bufs.buffers.length).toEqual(1);
+
+        const p3 = bufs.peek(1, 4);
+        expect(p3).not.toBeNull();
+        expect(Buffer.alloc(1, "e").equals(p3!)).toBeTruthy();
+        expect(bufs.buffers.length).toEqual(1);
+
+        const p4 = bufs.peek(1, 5);
+        expect(p4).toBeNull();
+
         const c1 = bufs.consume(1);
         expect(c1).not.toBeNull();
         expect(Buffer.alloc(1, "a").equals(c1!)).toBeTruthy();
@@ -49,18 +62,31 @@ describe("Buffers", () => {
         expect(Buffer.alloc(5, "abcde").equals(p1!)).toBeTruthy();
         expect(bufs.buffers.length).toEqual(2);
 
+        const p2 = bufs.peek(5, 2);
+        expect(p2).not.toBeNull();
+        expect(Buffer.alloc(5, "cdefg").equals(p2!)).toBeTruthy();
+        expect(bufs.buffers.length).toEqual(2);
+
+        const p3 = bufs.peek(3, 5);
+        expect(p3).not.toBeNull();
+        expect(Buffer.alloc(3, "fgh").equals(p3!)).toBeTruthy();
+        expect(bufs.buffers.length).toEqual(2);
+
+        const p4 = bufs.peek(1, 8);
+        expect(p4).toBeNull();
+
         const c1 = bufs.consume(7);
         expect(c1).not.toBeNull();
         expect(Buffer.alloc(7, "abcdefg").equals(c1!)).toBeTruthy();
         expect(bufs.buffers.length).toEqual(1);
 
-        const p2 = bufs.peek(1);
-        expect(p2).not.toBeNull();
-        expect(Buffer.alloc(1, "h").equals(p2!)).toBeTruthy();
+        const p5 = bufs.peek(1);
+        expect(p5).not.toBeNull();
+        expect(Buffer.alloc(1, "h").equals(p5!)).toBeTruthy();
         expect(bufs.buffers.length).toEqual(1);
 
-        const p3 = bufs.peek(2);
-        expect(p3).toBeNull();
+        const p6 = bufs.peek(2);
+        expect(p6).toBeNull();
         expect(bufs.buffers.length).toEqual(1);
 
         const c2 = bufs.consume(1);
@@ -68,8 +94,8 @@ describe("Buffers", () => {
         expect(Buffer.alloc(1, "h").equals(c2!)).toBeTruthy();
         expect(bufs.buffers.length).toEqual(0);
 
-        const p4 = bufs.peek(1);
-        expect(p4).toBeNull();
+        const p7 = bufs.peek(1);
+        expect(p7).toBeNull();
         expect(bufs.buffers.length).toEqual(0);
     });
 
