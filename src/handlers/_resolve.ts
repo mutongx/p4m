@@ -1,6 +1,6 @@
 import Handler from "./base";
 import { Texts } from "./consts";
-import { parse, ResolveTaskSpec, ResolveResultSpec } from "./p4object";
+import { parse, ResolveTaskSpec, ContentResolveResultSpec, NonContentResolveResultSpec } from "./p4object";
 
 import { LineIterator } from "../common/iter";
 import { colorDiff } from "../common/diff";
@@ -9,7 +9,7 @@ import type { ErrorMessage, InfoMessage, StatMessage, TextMessage } from "./base
 import type { P4Object } from "./p4object";
 
 export interface Resolve extends P4Object<typeof ResolveTaskSpec> {
-    result: P4Object<typeof ResolveResultSpec> | null
+    result: P4Object<typeof ContentResolveResultSpec> | P4Object<typeof NonContentResolveResultSpec> | null
 }
 
 export default class ResolveHandler extends Handler<null> {
@@ -37,22 +37,32 @@ export default class ResolveHandler extends Handler<null> {
                 this.ctx.printText(`  Target revision: ${task.endFromRev}`);
             }
         } else {
-            const result = parse(ResolveResultSpec, stat.data);
-            this.currentResolve!.result = result;
-            if (this.option.root) {
-                this.ctx.printText(`${result.toFile} - ${result.how} ${result.fromFile}`);
+            if (!this.currentResolve) {
+                throw new Error("current resolve is null");
+            }
+            if (this.currentResolve.resolveType == "content") {
+                const result = parse(ContentResolveResultSpec, stat.data);
+                this.currentResolve.result = result;
+                if (this.option.root) {
+                    this.ctx.printText(`${result.toFile} - ${result.how} ${result.fromFile}`);
+                }
+            } else {
+                const result = parse(NonContentResolveResultSpec, stat.data);
+                this.currentResolve.result = result;
             }
         }
     }
 
     override info(info: InfoMessage) {
-        if (this.currentResolve) {
-            if (this.option.root) {
+        if (this.option.root) {
+            if (this.currentResolve) {
                 if (info.data.startsWith("Diff chunk: ")) {
                     this.ctx.printText(`  ${info.data}`);
                 } else {
                     this.ctx.printText(info.data);
                 }
+            } else {
+                this.ctx.printText(info.data);
             }
         } else {
             this.messages.push(info);

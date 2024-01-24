@@ -72,12 +72,23 @@ export const ResolveTaskSpec = {
     "endFromRev": ["required", "string"],
     "resolveType": ["required", "string"],
     "resolveFlag": ["required", "string"],
-    "contentResolveType": ["required", "string"],
+    "contentTheirs": ["optional", "string"],
+    "contentResolveType": ["optional", "string"],
 } as const;
 
-export const ResolveResultSpec = {
+export const ContentResolveResultSpec = {
     "toFile": ["required", "string"],
     "how": ["required", "string"],
+    "fromFile": ["required", "string"],
+} as const;
+
+export const NonContentResolveResultSpec = {
+    "clientFile": ["required", "string"],
+    "depotFile": ["required", "string"],
+    "path": ["required", "string"],
+    "action": ["required", "string"],
+    "change": ["required", "string"],
+    "type": ["required", "string"],
     "fromFile": ["required", "string"],
 } as const;
 
